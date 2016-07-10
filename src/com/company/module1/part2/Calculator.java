@@ -1,5 +1,7 @@
 package com.company.module1.part2;
 
+import com.company.module1.part2.arithmeticFunctions.ArithmeticOperationsI;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -19,7 +21,7 @@ public class Calculator {
             System.out.println("Enter the second number: ");
             rightValue = sc.nextDouble();
             SimpleCalcFunctions calcFunctions = new SimpleCalcFunctions(operator);
-            ArithmeticOperations opc = calcFunctions.getFunctions().get(operator);
+            ArithmeticOperationsI opc = calcFunctions.getFunctions().get(operator);
             if (opc != null) {
                 result = opc.resultOfOperation(leftValue, rightValue);
                 System.out.println("Result: " + result);

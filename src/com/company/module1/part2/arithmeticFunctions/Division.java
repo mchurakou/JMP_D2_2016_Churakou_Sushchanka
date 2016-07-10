@@ -1,9 +1,9 @@
-package com.company.module1.part2;
+package com.company.module1.part2.arithmeticFunctions;
 
 /**
  * Created by alt-hanny on 10.07.2016.
  */
-public class Division implements ArithmeticOperations {
+public class Division implements ArithmeticOperationsI {
     @Override
     public double resultOfOperation(double leftValue, double rightValue) {
         return leftValue / rightValue;
