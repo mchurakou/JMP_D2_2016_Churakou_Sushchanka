@@ -1,4 +1,4 @@
-package com.company;
+package com.company.module1.part1;
 
 /**
  * Created by alt-hanny on 10.07.2016.

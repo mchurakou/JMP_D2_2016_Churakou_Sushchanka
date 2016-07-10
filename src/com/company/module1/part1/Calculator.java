@@ -1,4 +1,4 @@
-package com.company;
+package com.company.module1.part1;
 
 /**
  * Created by alt-hanny on 10.07.2016.
@@ -6,7 +6,7 @@ package com.company;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class Main {
+public class Calculator {
     public static void main(String[] args) {
         double inputX, inputY;
         double answer = 0;
