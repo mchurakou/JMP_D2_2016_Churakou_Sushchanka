@@ -1,10 +1,12 @@
 package com.company.module1.part1;
 
+import com.company.module1.part1.interfaces.OperationsI;
+
 /**
  * Created by alt-hanny on 10.07.2016.
  */
-public class Operations {
-
+public class BaseOperations implements OperationsI {
+    //DRY
     public double summation (double x, double y) {
         double result = x + y;
         return result;
@@ -23,5 +25,11 @@ public class Operations {
     public double division (double x, double y) {
         double result = x / y;
         return result;
+    }
+
+    //KISS
+    @Override
+    public void showMessage(double result) {
+        System.out.println("Result: " + result);
     }
 }

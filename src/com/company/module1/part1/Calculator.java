@@ -3,25 +3,31 @@ package com.company.module1.part1;
 /**
  * Created by alt-hanny on 10.07.2016.
  */
+import com.company.module1.part1.interfaces.MessengerI;
+
 import java.io.InputStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Calculator {
     public static void main(String[] args) {
+        //SOLID (Simple responsibility principle)
         double inputX, inputY;
         double answer = 0;
         char operation;
         InputStream input =  System.in;
         Scanner sc = new Scanner(input);
+        MessengerI messenger = new FrenchMessenger();
         try {
-            System.out.println("Enter the first number: ");
+            messenger.inputFirstNumMessage();
             inputX = sc.nextDouble();
-            System.out.println("Enter the operation: ");
+            messenger.inputOperationMessage();
             operation = sc.next().charAt(0);
-            System.out.println("Enter the second number: ");
+            messenger.inputSecondNumMessage();
             inputY = sc.nextDouble();
-            Operations ops = new Operations();
+            BaseOperations ops = new BaseOperations() {
+            };
+            //DRY
             switch (operation) {
                 case '+':
                     answer = ops.summation(inputX, inputY);
@@ -35,11 +41,10 @@ public class Calculator {
                 case '/':
                     answer = ops.division(inputX, inputY);
                     break;
-
                 default:
                     System.out.println("Error: Unknown operation");
             }
-            System.out.println("Result: " + answer);
+            ops.showMessage(answer);
         } catch (InputMismatchException e){
             System.out.println("Error: Unknown symbol");
             sc.nextLine();
