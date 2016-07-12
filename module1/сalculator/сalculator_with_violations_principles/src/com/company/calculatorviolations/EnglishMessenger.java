@@ -1,8 +1,6 @@
-package com.company.module1.part1;
+package com.company.calculatorviolations;
 
-import com.company.module1.part1.interfaces.MessengerI;
-
-import java.util.Locale;
+import com.company.calculatorviolations.interfaces.MessengerI;
 
 /**
  * Created by alt-hanny on 10.07.2016.
