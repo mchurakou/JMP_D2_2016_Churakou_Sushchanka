@@ -1,11 +1,13 @@
-package com.company.module1.part1;
+package com.company.calculatorviolations;
 
 /**
+ * Simple Calculator. Arithmetic functions: summation, substraction, multiplication, division.
+ *
  * Created by alt-hanny on 10.07.2016.
  */
-import com.company.module1.part1.interfaces.MessengerI;
+import com.company.calculatorviolations.constants.Constants;
+import com.company.calculatorviolations.interfaces.MessengerI;
 
-import java.io.InputStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,42 +17,34 @@ public class Calculator {
         double inputX, inputY;
         double answer = 0;
         char operation;
-        InputStream input =  System.in;
-        Scanner sc = new Scanner(input);
         MessengerI messenger = new FrenchMessenger();
-        try {
+        try (Scanner sc = new Scanner(System.in)){ //try with resource
             messenger.inputFirstNumMessage();
             inputX = sc.nextDouble();
             messenger.inputOperationMessage();
             operation = sc.next().charAt(0);
             messenger.inputSecondNumMessage();
             inputY = sc.nextDouble();
-            BaseOperations ops = new BaseOperations() {
-            };
             //DRY
             switch (operation) {
                 case '+':
-                    answer = ops.summation(inputX, inputY);
+                    answer = BaseOperations.summation(inputX, inputY);
                     break;
                 case '-':
-                    answer = ops.subtraction(inputX, inputY);
+                    answer = BaseOperations.subtraction(inputX, inputY);
                     break;
                 case '*':
-                    answer = ops.multiplication(inputX, inputY);
+                    answer = BaseOperations.multiplication(inputX, inputY);
                     break;
                 case '/':
-                    answer = ops.division(inputX, inputY);
+                    answer = BaseOperations.division(inputX, inputY);
                     break;
                 default:
-                    System.out.println("Error: Unknown operation");
+                    System.out.println(Constants.UNKNOWN_OPERATION_ERROR);
             }
-            ops.showMessage(answer);
+            BaseOperations.showMessage(answer);
         } catch (InputMismatchException e){
-            System.out.println("Error: Unknown symbol");
-            sc.nextLine();
-        } finally {
-            sc.close();
+            System.out.println(Constants.UNKNOWN_SYMBOL_ERROR);
         }
-
     }
 }
