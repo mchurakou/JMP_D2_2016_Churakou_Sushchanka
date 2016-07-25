@@ -3,11 +3,17 @@ package com.company.person.services;
 /**
  * Created by alt-hanny on 25.07.2016.
  */
-public enum QueriesEnum {
+enum QueriesEnum {
+    CREATE_TABLE {
+        @Override
+        public String getQuery() {
+            return "CREATE TABLE PERSON(ID INT, NAME VARCHAR(255), AGE INT);";
+        }
+    },
     GET_PERSON {
         @Override
         public String getQuery() {
-            return "SELECT * FROM PERSON  where id=(SELECT MAX(id) FROM PERSON)";
+            return "SELECT * FROM PERSON";
         }
     },
     SAVE_PERSON {
