@@ -1,5 +1,8 @@
 package com.company.superman;
 
+/**
+ * Runs the threads for testing singleton work.
+ */
 public class Main {
 
     public static void main(String[] args) {

@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 final class HarleyQuinn {
-
+    /** Variable for unique object. */
     private volatile static HarleyQuinn uniqueHarleyQuinn;
+    /** Array of the test letters.*/
     private String[] testLetters = {"S", "u", "p", "e", "r", "m", "a", "n",
         "H", "a", "r", "l", "e", "y", " ", "Q", "u", "i", "n", "n"};
 
@@ -16,6 +17,10 @@ final class HarleyQuinn {
     private HarleyQuinn() {
     }
 
+    /**
+     * Singleton.
+     * @return unique object.
+     */
     static HarleyQuinn getInstance() {
 
         if (firstThread) {
@@ -34,10 +39,19 @@ final class HarleyQuinn {
         return uniqueHarleyQuinn;
     }
 
+    /**
+     * Gets the letters list of the instance.
+     * @return letters list of the uniqInstance.
+     */
     LinkedList getLetterList() {
         return uniqueHarleyQuinn.letterList;
     }
 
+    /**
+     * Removes letters from the list.
+     * @param howManyLetters Number of the removing letters from list.
+     * @return list letters.
+     */
     LinkedList<String> getLetters(int howManyLetters) {
         LinkedList<String> lettersToSend = new LinkedList<>();
         for (int i = 0; i <= howManyLetters; i++) {

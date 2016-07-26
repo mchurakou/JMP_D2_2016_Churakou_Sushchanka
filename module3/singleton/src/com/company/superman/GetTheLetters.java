@@ -2,6 +2,9 @@ package com.company.superman;
 
 import java.util.LinkedList;
 
+/**
+ * Testing of the singleton work.
+ */
 class GetTheLetters implements Runnable {
 
     public void run() {
