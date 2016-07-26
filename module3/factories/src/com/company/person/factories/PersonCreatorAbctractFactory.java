@@ -3,8 +3,9 @@ package com.company.person.factories;
 import com.company.person.creators.PersonCreatorI;
 
 /**
- * Created by alt-hanny on 24.07.2016.
+ * Abstract Factory for person creators.
  */
 public abstract class PersonCreatorAbctractFactory {
+    /** Makes the person creator. */
     public abstract PersonCreatorI makePersonCreator();
 }

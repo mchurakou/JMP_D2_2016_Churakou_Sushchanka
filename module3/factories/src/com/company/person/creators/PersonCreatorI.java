@@ -5,10 +5,13 @@ import com.company.person.beans.Person;
 import java.io.IOException;
 
 /**
- * Created by alt-hanny on 24.07.2016.
+ * Person creators interface.
  */
 public interface PersonCreatorI {
+    /** Writes the person. */
     void writePerson(Person person) throws IOException;
+    /** Reads the person. */
     Person readPerson() throws IOException, ClassNotFoundException;
+    /** Reads the person by name. */
     Person readPerson(String name);
 }

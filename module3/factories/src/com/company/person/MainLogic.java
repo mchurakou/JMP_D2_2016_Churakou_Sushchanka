@@ -6,11 +6,12 @@ import com.company.person.creators.PersonCreatorI;
 import java.io.IOException;
 
 /**
+ * Main logic. Reading and writing persons.
  * Created by alt-hanny on 24.07.2016.
  */
 class MainLogic {
     static void execute(PersonCreatorI personCreator) throws IOException, ClassNotFoundException {
-        personCreator.writePerson(new Person(2, "Hanna", 27));
+        personCreator.writePerson(new Person(2, "Yauhen", 27));
         Person person = personCreator.readPerson();
         System.out.println("Reading" + person);
         person = personCreator.readPerson("Yauhen");

@@ -4,10 +4,10 @@ import com.company.person.creators.PersonCreatorI;
 import com.company.person.factories.PersonCreatorAbctractFactory;
 import com.company.person.factories.PersonCreatorFileFactory;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
+ * Runner for the work with file.
  * Created by alt-hanny on 25.07.2016.
  */
 public class RunnerFile {

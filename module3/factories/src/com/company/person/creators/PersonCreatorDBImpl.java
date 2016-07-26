@@ -1,40 +1,64 @@
 package com.company.person.creators;
 
 import com.company.person.beans.Person;
+import com.company.person.constants.Constants;
 import com.company.person.services.DBFactoryDAO;
 import com.company.person.services.QueriesFactory;
 import com.company.person.services.dbconnection.ConnectionDBImpl;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 /**
- * Created by alt-hanny on 25.07.2016.
+ * Implements the creator with database.
  */
-public class PersonCreatorDB implements PersonCreatorI {
-    private static final String GET_PERSON = "GET_PERSON";
-    private static final String SAVE_PERSON = "SAVE_PERSON";
-    private static final String GET_PERSON_BY_NAME = "GET_PERSON_BY_NAME";
+public class PersonCreatorDBImpl implements PersonCreatorI {
+    /** Constant for the reading person query. */
+    private static final String READ_PERSON = "READ_PERSON";
+    /** Constant for the writing person query. */
+    private static final String WRITE_PERSON = "WRITE_PERSON";
+    /** Constant for the reading person by name query. */
+    private static final String READ_PERSON_BY_NAME = "READ_PERSON_BY_NAME";
+    /** Constant for the creating table query.*/
     private static final String CREATE_TABLE = "CREATE_TABLE";
 
+    /** Gets connection. */
     private ConnectionDBImpl connectionDAO = new DBFactoryDAO().getDAO();
+    /** Queries factory. */
     private QueriesFactory queriesFactory = new QueriesFactory();
 
+    /**
+     * Checks if the table exists.
+     * @return false if table not exists.
+     * @throws SQLException
+     */
     public boolean isTableExists() throws SQLException {
         DatabaseMetaData meta = connectionDAO.getConnection().getMetaData();
         ResultSet resultSet = meta.getTables(null, null, "person", new String[] { "TABLE" });
         return resultSet.next() ? true : false;
     }
 
+    /**
+     * Creates table.
+     * @throws SQLException
+     */
     public void createTable() throws SQLException {
         String query = queriesFactory.getQuery(CREATE_TABLE);
-        try ( Connection connection = connectionDAO.getConnection();
-              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = connectionDAO.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
         }
     }
 
+    /**
+     * Writes the person to database.
+     * @param person Person.
+     */
     public void writePerson(Person person) {
-        String query = queriesFactory.getQuery(SAVE_PERSON);
+        String query = queriesFactory.getQuery(WRITE_PERSON);
 
         try ( Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -47,8 +71,12 @@ public class PersonCreatorDB implements PersonCreatorI {
         }
     }
 
+    /**
+     * Reads the person from database.
+     * @return Person.
+     */
     public Person readPerson() {
-        String query = queriesFactory.getQuery(GET_PERSON);
+        String query = queriesFactory.getQuery(READ_PERSON);
         Person person = null;
         try ( Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -63,8 +91,13 @@ public class PersonCreatorDB implements PersonCreatorI {
         return person;
     }
 
+    /**
+     * Reads the person by name from database.
+     * @param name Person's name.
+     * @return Object Person.
+     */
     public Person readPerson(String name) {
-        String query = queriesFactory.getQuery(GET_PERSON_BY_NAME);
+        String query = queriesFactory.getQuery(READ_PERSON_BY_NAME);
 
         Person person = null;
 
@@ -82,11 +115,17 @@ public class PersonCreatorDB implements PersonCreatorI {
         return person;
     }
 
-    private Person createPerson (ResultSet rs) throws SQLException {
+    /**
+     * Creates the person.
+     * @param resultSet result set.
+     * @return Person.
+     * @throws SQLException
+     */
+    private Person createPerson (ResultSet resultSet) throws SQLException {
         Person person = new Person();
-        person.setId(rs.getInt("ID"));
-        person.setName(rs.getString("NAME"));
-        person.setAge(rs.getInt("AGE"));
+        person.setId(resultSet.getInt(Constants.PERSON_ID));
+        person.setName(resultSet.getString(Constants.PERSON_NAME));
+        person.setAge(resultSet.getInt(Constants.PERSON_AGE));
         return person;
     }
 }
