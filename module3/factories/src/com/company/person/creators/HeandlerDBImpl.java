@@ -5,9 +5,9 @@ import com.company.person.constants.Constants;
 import com.company.person.services.DBFactoryDAO;
 import com.company.person.services.QueriesFactory;
 import com.company.person.services.dbconnection.ConnectionDBImpl;
+import com.company.person.services.dbconnection.DBUtils;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 /**
  * Implements the creator with database.
  */
-public class PersonCreatorDBImpl implements PersonCreatorI {
+public class HeandlerDBImpl implements HeandlerI {
     /** Constant for the reading person query. */
     private static final String READ_PERSON = "READ_PERSON";
     /** Constant for the writing person query. */
@@ -30,26 +30,31 @@ public class PersonCreatorDBImpl implements PersonCreatorI {
     /** Queries factory. */
     private QueriesFactory queriesFactory = new QueriesFactory();
 
-    /**
-     * Checks if the table exists.
-     * @return false if table not exists.
-     * @throws SQLException
-     */
-    public boolean isTableExists() throws SQLException {
-        DatabaseMetaData meta = connectionDAO.getConnection().getMetaData();
-        ResultSet resultSet = meta.getTables(null, null, "person", new String[] { "TABLE" });
-        return resultSet.next() ? true : false;
+    public HeandlerDBImpl() {
+        init();
     }
 
+    private void init() {
+        try (Connection connection = connectionDAO.getConnection()) {
+            DBUtils utils = new DBUtils(connection);
+            if (utils.isTableExists(connection)) {
+                createTable();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Creates table.
      * @throws SQLException
      */
-    public void createTable() throws SQLException {
+    public void createTable() {
         String query = queriesFactory.getQuery(CREATE_TABLE);
         try (Connection connection = connectionDAO.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

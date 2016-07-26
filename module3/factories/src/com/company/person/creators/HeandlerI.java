@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Person creators interface.
  */
-public interface PersonCreatorI {
+public interface HeandlerI {
     /** Writes the person. */
     void writePerson(Person person) throws IOException;
     /** Reads the person. */

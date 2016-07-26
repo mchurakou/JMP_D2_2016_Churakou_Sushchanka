@@ -12,7 +12,7 @@ import java.io.FileInputStream;
 /**
  * Implements person creator. Work with file.
  */
-public class PersonCreatorFileImpl implements PersonCreatorI {
+public class HeandlerFileImpl implements HeandlerI {
     /** Tha file path constant. */
     private final static String FILE_PATH = "module3\\factories\\resources\\person.csv";
 
