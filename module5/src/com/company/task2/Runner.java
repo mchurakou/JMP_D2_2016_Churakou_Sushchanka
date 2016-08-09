@@ -3,9 +3,6 @@ package com.company.task2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -18,13 +15,14 @@ public class Runner {
             System.out.println("Please, input the path of class: ");
             try {
                 String name = new BufferedReader(new InputStreamReader(System.in)).readLine();
+                // The parent class loader for delegation.
                 ClassLoader parent = CustomClassloaderReloadingAtRuntime.class.getClassLoader();
                 CustomClassloaderReloadingAtRuntime classLoader = new CustomClassloaderReloadingAtRuntime(parent);
                 Class<?> semaphore = classLoader.loadClass(name);
                 Object semObj = semaphore.newInstance();
                 Method method = semaphore.getMethod("lever");
                 method.invoke(semObj);
-//          makeMethodHandle(semObj);
+                System.out.println("Press any key.");
                 new BufferedReader(new InputStreamReader(System.in)).readLine();
             }  catch (ClassNotFoundException | IOException | InstantiationException |
                     NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -32,11 +30,4 @@ public class Runner {
             }
         }
     }
-
-//    private static MethodHandle makeMethodHandle(Object semObj) throws Throwable {
-//        MethodType description = MethodType.methodType(void.class);
-//        MethodHandle methodHandle = MethodHandles.lookup().findVirtual(Semaphore.class,"lever", description);
-//        methodHandle.invokeExact(semObj);
-//        return methodHandle;
-//    }
 }

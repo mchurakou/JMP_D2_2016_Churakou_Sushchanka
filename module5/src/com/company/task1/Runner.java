@@ -23,6 +23,7 @@ public class Runner {
 
     private static void loadingClass(String path) throws Throwable {
         System.out.println("Start loading");
+        // The parent class loader for delegation.
         ClassLoader parent = CustomClassloader.class.getClassLoader();
         CustomClassloader customClassloader = new CustomClassloader(parent);
         Class<?> semaphore = customClassloader.loadClass(path);

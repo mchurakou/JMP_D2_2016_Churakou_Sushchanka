@@ -12,6 +12,12 @@ public class CustomClassloader extends ClassLoader {
         super(parent);
     }
 
+    /**
+     *  Loads class.
+     * @param name The name of the class.
+     * @return The resulting <tt>Class</tt> object.
+     * @throws ClassNotFoundException If the class could not be found.
+     */
     @Override
     public synchronized Class<?> loadClass(String name) throws ClassNotFoundException {
         Class<?> result;
