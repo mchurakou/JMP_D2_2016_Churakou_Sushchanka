@@ -15,7 +15,8 @@ import java.util.HashMap;
  */
 class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
     private Map<String, Class<?>> classesCash = new HashMap<>();
-    CustomClassloaderReloadingAtRuntime(ClassLoader parent) {
+
+    public CustomClassloaderReloadingAtRuntime(ClassLoader parent) {
         super(parent);
     }
 
@@ -41,13 +42,16 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
             return result;
         }
 
+
         File file = findFile(name.replace('.','/'),".class");
         if (file == null) {
-            return findSystemClass(name);
+            Class<?> systemClass = findSystemClass(name);
+            result = systemClass;
         }
-
-        byte[] classBytes = loadFileAsBytes(file);
-        result = defineClass(name, classBytes, 0, classBytes.length);
+        else {
+            byte[] classBytes = loadFileAsBytes(file);
+            result = defineClass(name, classBytes, 0, classBytes.length);
+        }
 
         classesCash.put(name, result);
         return result;
@@ -66,8 +70,13 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
     }
 
     private File findFile(String name, String ext) {
-        File file = new File((new File(name)).getPath()+File.separatorChar+name.replace('/',File.separatorChar)+ext);
-        return (file.exists()) ? file : null;
+        //(new File(name)).getPath()+File.separatorChar+name.replace('/',File.separatorChar)+ext
+        File file = new File("D:\\2016_Mentoring\\Tasks\\module1\\JMP_D2_2016_Churakou_Sushchanka\\module5\\out\\"+name.replace('/',File.separatorChar)+ext);
+       boolean flag = file.exists();
+        if (flag) {
+            return file;
+        }
+        return null;
     }
 
 }

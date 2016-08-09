@@ -3,8 +3,8 @@ package com.company.task2;
 /**
  * Created by Hanna_Sushchanka on 8/8/2016.
  */
- class Semaphore {
+ public class Semaphore {
     public void lever() {
-        System.out.println("Semaphore4 works!");
+        System.out.println("Semaphore10 works!");
     }
 }

@@ -24,8 +24,8 @@ public class Runner {
 
     private static void loadingClass(String path) throws Throwable {
         System.out.println("In Progress");
-        ClassLoader parentClassLoader = CustomClassloader.class.getClassLoader();
-        CustomClassloader customClassloader = new CustomClassloader(parentClassLoader);
+        ClassLoader parent = CustomClassloader.class.getClassLoader();
+        CustomClassloader customClassloader = new CustomClassloader(parent);
         Class<?> semaphore = customClassloader.loadClass(path);
         Semaphore semObj = (Semaphore) semaphore.newInstance();
         makeMethodHandle(semObj);

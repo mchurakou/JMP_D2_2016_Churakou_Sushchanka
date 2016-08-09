@@ -9,7 +9,6 @@ import java.util.Map;
  * Created by alt-hanny on 07.08.2016.
  */
 public class CustomClassloader extends ClassLoader {
-
     public CustomClassloader(ClassLoader parent) {
         super(parent);
     }
