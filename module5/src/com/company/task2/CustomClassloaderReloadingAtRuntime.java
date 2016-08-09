@@ -4,10 +4,9 @@ import com.company.task1.CustomClassloader;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -15,7 +14,7 @@ import java.util.HashMap;
  */
 class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
     private Map<String, Class<?>> classesCash = new HashMap<>();
-    private final String CLASSPATH = "D:\\2016_Mentoring\\Tasks\\module1\\JMP_D2_2016_Churakou_Sushchanka\\module5\\out\\";
+    private final String CLASSPATH = "module5/out/com/company/task2/";
 
     public CustomClassloaderReloadingAtRuntime(ClassLoader parent) {
         super(parent);
@@ -45,8 +44,10 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
 
         File file = findFile(name.replace('.','/'),".class");
         if (file == null) {
+            System.out.println("Loading through the system class loader: " + name);
             result = findSystemClass(name);
         } else {
+            System.out.println("In progress. Loading file: " + name);
             byte[] classBytes = loadFileAsBytes(file);
             result = defineClass(name, classBytes, 0, classBytes.length);
         }
@@ -59,7 +60,7 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
         try(FileInputStream fis = new FileInputStream(file)) {
             fis.read(result, 0, result.length);
         } catch (IOException e) {
-            throw new ClassNotFoundException("Class not found." + e);
+            throw new ClassNotFoundException("Error:" + e);
         }
         return result;
     }

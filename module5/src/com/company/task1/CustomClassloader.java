@@ -14,13 +14,14 @@ public class CustomClassloader extends ClassLoader {
 
     @Override
     public synchronized Class<?> loadClass(String name) throws ClassNotFoundException {
-        Class<?> result = null;
+        Class<?> result;
             try {
                 URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[]{new URL("file:/D://"+name)});
                 result = urlClassLoader.loadClass(name);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                throw new ClassNotFoundException("Error: " + e);
             }
+        System.out.println("In progress.");
         return result;
     }
 }

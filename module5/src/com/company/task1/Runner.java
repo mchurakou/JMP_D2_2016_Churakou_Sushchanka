@@ -13,7 +13,6 @@ public class Runner {
         try(Scanner scanner = new Scanner(System.in)) {
             System.out.println("Please, input the path of class: ");
             String classPath = scanner.nextLine();
-            System.out.println("Start the loading");
             loadingClass(classPath);
         } catch (ClassNotFoundException e) {
             System.out.println("Error. Class not found.");
@@ -23,7 +22,7 @@ public class Runner {
     }
 
     private static void loadingClass(String path) throws Throwable {
-        System.out.println("In Progress");
+        System.out.println("Start loading");
         ClassLoader parent = CustomClassloader.class.getClassLoader();
         CustomClassloader customClassloader = new CustomClassloader(parent);
         Class<?> semaphore = customClassloader.loadClass(path);
