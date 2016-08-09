@@ -21,15 +21,15 @@ public class Runner {
             Object semObj = semaphore.newInstance();
             Method method = semaphore.getMethod("lever");
             method.invoke(semObj);
-//            makeMethodHandle(semObj);
+//          makeMethodHandle(semObj);
             new BufferedReader(new InputStreamReader(System.in)).readLine();
         }
     }
 
-    private static MethodHandle makeMethodHandle(Object semObj) throws Throwable {
-        MethodType description = MethodType.methodType(void.class);
-        MethodHandle methodHandle = MethodHandles.lookup().findVirtual(Semaphore.class,"lever", description);
-        methodHandle.invokeExact(semObj);
-        return methodHandle;
-    }
+//    private static MethodHandle makeMethodHandle(Object semObj) throws Throwable {
+//        MethodType description = MethodType.methodType(void.class);
+//        MethodHandle methodHandle = MethodHandles.lookup().findVirtual(Semaphore.class,"lever", description);
+//        methodHandle.invokeExact(semObj);
+//        return methodHandle;
+//    }
 }

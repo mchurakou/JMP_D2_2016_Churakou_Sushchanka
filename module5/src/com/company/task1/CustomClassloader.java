@@ -1,9 +1,8 @@
 package com.company.task1;
 
-import java.io.*;
-import java.net.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * Created by alt-hanny on 07.08.2016.

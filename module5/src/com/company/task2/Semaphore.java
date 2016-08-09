@@ -5,6 +5,6 @@ package com.company.task2;
  */
  public class Semaphore {
     public void lever() {
-        System.out.println("Semaphore10 works!");
+        System.out.println("Semaphore12 works!");
     }
 }

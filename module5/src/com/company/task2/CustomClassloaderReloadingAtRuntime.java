@@ -15,6 +15,7 @@ import java.util.HashMap;
  */
 class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
     private Map<String, Class<?>> classesCash = new HashMap<>();
+    private final String CLASSPATH = "D:\\2016_Mentoring\\Tasks\\module1\\JMP_D2_2016_Churakou_Sushchanka\\module5\\out\\";
 
     public CustomClassloaderReloadingAtRuntime(ClassLoader parent) {
         super(parent);
@@ -42,41 +43,30 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
             return result;
         }
 
-
         File file = findFile(name.replace('.','/'),".class");
         if (file == null) {
-            Class<?> systemClass = findSystemClass(name);
-            result = systemClass;
-        }
-        else {
+            result = findSystemClass(name);
+        } else {
             byte[] classBytes = loadFileAsBytes(file);
             result = defineClass(name, classBytes, 0, classBytes.length);
         }
-
         classesCash.put(name, result);
         return result;
     }
 
-    private byte[] loadFileAsBytes(File file) {
+    private byte[] loadFileAsBytes(File file) throws ClassNotFoundException {
         byte[] result = new byte[(int)file.length()];
         try(FileInputStream fis = new FileInputStream(file)) {
             fis.read(result, 0, result.length);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ClassNotFoundException("Class not found." + e);
         }
         return result;
     }
 
     private File findFile(String name, String ext) {
-        //(new File(name)).getPath()+File.separatorChar+name.replace('/',File.separatorChar)+ext
-        File file = new File("D:\\2016_Mentoring\\Tasks\\module1\\JMP_D2_2016_Churakou_Sushchanka\\module5\\out\\"+name.replace('/',File.separatorChar)+ext);
-       boolean flag = file.exists();
-        if (flag) {
-            return file;
-        }
-        return null;
+        File file = new File(CLASSPATH + name.replace('/',File.separatorChar)+ext);
+        return file.exists() ? file : null;
     }
 
 }
