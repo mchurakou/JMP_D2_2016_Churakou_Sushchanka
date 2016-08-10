@@ -3,6 +3,7 @@ package com.company.task2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.Integer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -26,6 +27,7 @@ public class Runner {
                 new BufferedReader(new InputStreamReader(System.in)).readLine();
             }  catch (ClassNotFoundException | IOException | InstantiationException |
                     NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
                 System.out.println("Error: " + e);
             }
         }

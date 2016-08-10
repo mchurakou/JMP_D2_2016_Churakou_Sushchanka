@@ -1,7 +1,5 @@
 package com.company.task2;
 
-import com.company.task1.CustomClassloader;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,11 +11,9 @@ import java.util.Map;
  *
  * Classloader for reload classes in runtime.
  */
-class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
-    /** Cache. */
-    private Map<String, Class<?>> classesCache = new HashMap<>();
+class CustomClassloaderReloadingAtRuntime extends ClassLoader {
     /** Class path. */
-    private final String CLASSPATH = "module5/out/com/company/task2/";
+    private final String CLASSPATH = "D:\\temp1\\";
     /** File name separator. Dot. */
     private final Character DOT = '.';
     /** File name separator. Slash. */
@@ -38,22 +34,7 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
      */
     @Override
     public synchronized Class<?> loadClass(String name) throws ClassNotFoundException {
-        return loadClass(name, false);
-    }
-
-    /**
-     *  Loads class.
-     * @param name The name of the class.
-     * @param resolve If <tt>true</tt> then resolve the class.
-     * @return The resulting <tt>Class</tt> object.
-     * @throws ClassNotFoundException If the class could not be found.
-     */
-    @Override
-    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         Class<?> result = findClass(name);
-        if (resolve) {
-            resolveClass(result);
-        }
         return result;
     }
 
@@ -65,22 +46,18 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
      */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        Class<?> result = classesCache.get(name);
-        if (result != null) {
-            System.out.println("Class" + name + "found in cache");
-            return result;
+        Class<?> result = super.loadClass(name);
+        if (result == null) {
+            File file = findFile(name.replace(DOT, SLASH), CLASS_EXT);
+            if (file == null) {
+                System.out.println("Loading through the system class loader: " + name);
+                result = findSystemClass(name);
+            } else {
+                System.out.println("In progress. Loading file: " + name);
+                byte[] classBytes = loadFileAsBytes(file);
+                result = defineClass(name, classBytes, 0, classBytes.length);
+            }
         }
-
-        File file = findFile(name.replace(DOT, SLASH), CLASS_EXT);
-        if (file == null) {
-            System.out.println("Loading through the system class loader: " + name);
-            result = findSystemClass(name);
-        } else {
-            System.out.println("In progress. Loading file: " + name);
-            byte[] classBytes = loadFileAsBytes(file);
-            result = defineClass(name, classBytes, 0, classBytes.length);
-        }
-        classesCache.put(name, result);
         return result;
     }
 
@@ -103,7 +80,6 @@ class CustomClassloaderReloadingAtRuntime extends CustomClassloader {
 
     /**
      * Finds file.
-     *
      * @param name Name of the file.
      * @param ext Extension of the file.
      * @return Founded file.
