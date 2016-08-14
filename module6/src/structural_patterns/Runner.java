@@ -15,14 +15,8 @@ import structural_patterns.characters.races.Race;
  */
 public class Runner {
     public static void main(String arg[]) {
-        Race race = new Human();
-        Fighter fighter = new Monk();
-        Mage mage = new Mage(fighter, race);
-        mage.fight();
-        Warrior warrior = new Warrior(fighter, race);
-        warrior.fight();
-        Healer healer = new SimpleHealer();
-        Fighter healerAdapter = new HealerAdapter(healer, race);
-        healerAdapter.autofight();
+        ArenaFacad arenaFacad = new ArenaFacad(new ArenaLights(), new SelectionCharacters());
+        arenaFacad.startFight();
+        arenaFacad.endFight();
     }
 }
