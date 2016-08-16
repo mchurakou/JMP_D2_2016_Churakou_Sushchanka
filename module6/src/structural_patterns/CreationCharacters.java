@@ -1,7 +1,10 @@
 package structural_patterns;
 
 import structural_patterns.characters.HealerAdapter;
-import structural_patterns.characters.fighters.*;
+import structural_patterns.characters.fighters.Fighter;
+import structural_patterns.characters.fighters.Mage;
+import structural_patterns.characters.fighters.Monk;
+import structural_patterns.characters.fighters.Warrior;
 import structural_patterns.characters.healers.Healer;
 import structural_patterns.characters.healers.Prist;
 import structural_patterns.characters.races.Elf;
@@ -13,11 +16,14 @@ import java.util.Scanner;
 /**
  * Created by alt-hanny on 14.08.2016.
  */
-public class SelectionCharacters {
+public class CreationCharacters {
+    /** Variable for the race of char. */
     private Race race;
+    /** Variable for the class of char. */
     private Fighter fighter;
 
-    public void charSelection() {
+    /** Char selection.*/
+    public void charCreation() {
         boolean userChooseDone;
         try (Scanner sc = new Scanner(System.in)){
             System.out.println("Please, choose the race of the character: \n 1 - Human; \n 2 - Elf;");
@@ -37,11 +43,11 @@ public class SelectionCharacters {
                         userChooseDone = Boolean.FALSE;
                 }
             } while (!userChooseDone);
-        fighterSelection(race);
+        classCreation(race);
         }
     }
 
-    public void fighterSelection(Race race) {
+    private void classCreation(Race race) {
         boolean userChooseDone;
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Please, choose the class of the character: \n 1 - Monk; \n 2 - Mage; \n 3 - Warrior; \n 4 - Prist");
