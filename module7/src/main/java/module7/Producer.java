@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 class Producer implements Runnable {
 
     private static final Logger logger = LogManager.getLogger(Producer.class);
+    private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private Broker broker;
 
     Producer(Broker broker) {
@@ -22,17 +23,21 @@ class Producer implements Runnable {
 
     @Override
     public void run() {
-        int number = NumberGenerator.getNumber();
         final String nameThread = Thread.currentThread().getName();
-        logger.info("Producer started with number - " + number);
-        try {
-            TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(1000, 2000));
-            broker.put(number);
-            logger.info("Added " + number);
-            logger.info("Producer " + nameThread +" terminated.");
-        } catch (InterruptedException e) {
-            logger.error("Producer" + nameThread + "was interrapted.");
-            e.printStackTrace();
+        int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
+        System.out.println("producer" + delay);
+        int number;
+        while ((number = NumberGenerator.getNumber()) != Integer.MIN_VALUE) {
+            System.out.println(nameThread + " started with number - " + number);
+            try {
+                TimeUnit.MILLISECONDS.sleep(delay);
+                broker.put(number);
+                taskLogger.info("Added " + number + "to queue.");
+                logger.info("Producer " + nameThread +" terminated.");
+            } catch (InterruptedException e) {
+                logger.error("Producer" + nameThread + "was interrapted.");
+                e.printStackTrace();
+            }
         }
     }
 }

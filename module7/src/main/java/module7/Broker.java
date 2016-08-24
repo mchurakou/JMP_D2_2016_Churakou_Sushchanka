@@ -1,9 +1,7 @@
 package module7;
 
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TransferQueue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Helper class. Puts and polls number in queue.
@@ -12,14 +10,14 @@ import java.util.concurrent.TransferQueue;
  */
 class Broker {
     /** Queue for storing numbers. */
-    private static TransferQueue<Integer> queue = new LinkedTransferQueue<>();
+    private BlockingQueue <Integer> queue = new ArrayBlockingQueue<>(10);
 
     /**
      * Puts numbers into queue.
      * @param value Value of the generated numbers.
      * @throws InterruptedException InterruptedException.
      */
-    void put(int value) throws InterruptedException {
+    void put(Integer value) throws InterruptedException {
         queue.put(value);
     }
 
@@ -28,7 +26,8 @@ class Broker {
      * @return Value of the generated number from queue.
      * @throws InterruptedException InterruptedException.
      */
-    int poll() throws InterruptedException {
-        return !queue.isEmpty() ? queue.poll(ThreadLocalRandom.current().nextInt(10, 200), TimeUnit.MILLISECONDS) : -1;
+    Integer poll() throws InterruptedException {
+        System.out.println("*************" + queue.size());
+        return queue.poll();
     }
 }

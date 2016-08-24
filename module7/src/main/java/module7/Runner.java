@@ -1,15 +1,10 @@
 package module7;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
+import java.util.concurrent.*;
 
 /**
  * Runner for the application. Creates N producers and M consumers.
@@ -18,29 +13,42 @@ import java.util.concurrent.TimeUnit;
  */
 public class Runner
 {
-    public static void main( String[] args ) throws ExecutionException, InterruptedException {
+    public static void main( String[] args ){
         final Logger logger = LogManager.getLogger(Runner.class);
         logger.info("++++++++ Application started ++++++++");
-        int numberOfProducers = 10;
-        int numberOfConsumers = 20;
-        int poolCapacity = 30;
         Broker broker = new Broker();
-        final ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("module7-%d").setDaemon(Boolean.FALSE).build();
-        ExecutorService threadPool = Executors.newFixedThreadPool(poolCapacity, threadFactory);
-        logger.info("Thread pool created.");
-        for(int i = 0; i < numberOfProducers; i++)
-        {
-            Future producerStatus = threadPool.submit(new Producer(broker));
-            producerStatus.get();
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Enter the maximum number of generated numbers:");
+            int maxNumbers = scanner.nextInt();
+            NumberGenerator.setMaxNumber(maxNumbers);
+            System.out.println("Input the number of producers:");
+            int numberOfProducers = scanner.nextInt();
+            System.out.println("Input the number of consumers:");
+            int numberOfConsumers = scanner.nextInt();
+            System.out.println("Input the pool capacity");
+            int poolCapacity = scanner.nextInt();
+//            CountDownLatch startSignal = new CountDownLatch(1);
+//            CountDownLatch doneSignal = new CountDownLatch(5);
+            ExecutorService threadPool = Executors.newFixedThreadPool(poolCapacity);
+            logger.info("Thread pool created.");
+            for (int i = 0; i < numberOfConsumers; i++) {
+                 threadPool.submit(new Consumer(broker));
+//                Consumer consumer = new Consumer(broker);
+//                new Thread(consumer).start();
+            }
+            for (int i = 0; i < numberOfProducers; i++) {
+                threadPool.submit(new Producer(broker));
+//                Producer producer = new Producer(broker);
+//                new Thread(producer).start();
+            }
+
+            threadPool.shutdown();
+            final boolean done = threadPool.awaitTermination(5, TimeUnit.MINUTES);
+            logger.info("All threads terminated? {}", done);
+        } catch (InterruptedException e) {
+            logger.error("ThreadPool was interrupted.");
+            e.printStackTrace();
         }
-        for(int i = 0; i < numberOfConsumers; i++)
-        {
-            Future consumerStatus = threadPool.submit(new Consumer(broker));
-            consumerStatus.get();
-        }
-        threadPool.shutdown();
-        final boolean done = threadPool.awaitTermination(15, TimeUnit.SECONDS);
-        logger.info("All threads terminated? {}", done);
-        threadPool.shutdownNow();
     }
 }
