@@ -16,12 +16,11 @@ import java.util.concurrent.*;
  */
 public class Runner
 {
+    public static List<Phase> phases = new ArrayList<>();
     public static void main( String[] args ){
         final Logger logger = LogManager.getLogger(Runner.class);
         logger.info("++++++++ Application started ++++++++");
         List<Phase> phases = new ArrayList<>();
-
-
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter the maximum number of generated numbers:");
             int maxNumbers = scanner.nextInt();
@@ -35,12 +34,14 @@ public class Runner
             ExecutorService threadPool = Executors.newFixedThreadPool(numberOfConsumers + numberOfProducers);
             logger.info("Thread pool created.");
             for (int i = 0; i < numberOfProducers; i++) {
-                threadPool.submit(new Producer(phases, prodLatch));
+                threadPool.submit(new Producer(prodLatch));
+            }
+            for (int i = 0; i < numberOfConsumers; i++) {
+                threadPool.submit(new Consumer(consumLatch));
             }
             prodLatch.await();
-            for (int i = 0; i < numberOfConsumers; i++) {
-                threadPool.submit(new Consumer(phases, consumLatch));
-            }
+         //   phases.add(Phase.PRODUCERS_FINISH);
+
             threadPool.shutdown();
             final boolean done = threadPool.awaitTermination(5, TimeUnit.MINUTES);
             logger.info("All threads terminated? {}", done);

@@ -12,15 +12,14 @@ import java.util.concurrent.PriorityBlockingQueue;
  */
 class Broker {
     /** Queue for storing numbers. */
-    private static BlockingQueue <Numb> queue = new PriorityBlockingQueue<>(10);
-
+    private static BlockingQueue <Integer> queue = new ArrayBlockingQueue<>(10);
     /**
      * Puts numbers into queue.
      * @param value Value of the generated numbers.
      * @throws InterruptedException InterruptedException.
      */
     static void put(Integer value) throws InterruptedException {
-        queue.put(new Numb(value));
+        queue.put(value);
     }
 
     /**
@@ -28,30 +27,11 @@ class Broker {
      * @return Value of the generated number from queue.
      * @throws InterruptedException InterruptedException.
      */
-    static String poll() throws InterruptedException {
-        return queue.poll().toString();
+    static Integer poll() throws InterruptedException {
+        return queue.poll();
     }
 
     static Boolean isEmptyQueue() {
         return queue.isEmpty();
     }
-
-    static class Numb implements Comparable<Numb> {
-        int value;
-        Numb (int value) {
-            this.value = value;
-        }
-        @Override
-        public int compareTo(Numb o) {
-            if (o.value > value) return -1;
-            if (value > o.value) return 1;
-            return 0;
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(value);
-        }
-    }
-
 }

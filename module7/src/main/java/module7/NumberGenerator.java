@@ -16,6 +16,10 @@ class NumberGenerator {
         NumberGenerator.maxNumber = maxNumber;
     }
 
+    public static int getMaxNumber() {
+        return maxNumber;
+    }
+
     static int getNumber() {
         int value = numberAtomic.get();
         return (!numberAtomic.compareAndSet(maxNumber, value)) ? numberAtomic.incrementAndGet() : Integer.MIN_VALUE;

@@ -15,11 +15,10 @@ import java.util.concurrent.TimeUnit;
  */
 class Producer implements Runnable {
     private static final Logger logger = LogManager.getLogger(Producer.class);
+    private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private CountDownLatch prodLatch;
-    private List<Phase> phases;
 
-    public Producer(List<Phase> phases, CountDownLatch prodLatch) {
-        this.phases = phases;
+    public Producer(CountDownLatch prodLatch) {
         this.prodLatch = prodLatch;
     }
 
@@ -40,7 +39,6 @@ class Producer implements Runnable {
                 e.printStackTrace();
             }
         }
-        phases.add(Phase.GENERATION_FINISHED);
         logger.info("Number generation stopped");
         prodLatch.countDown();
         logger.info("Producer " + nameThread +" terminated.");
