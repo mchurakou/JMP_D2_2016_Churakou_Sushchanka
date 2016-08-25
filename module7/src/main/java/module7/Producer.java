@@ -17,9 +17,11 @@ class Producer implements Runnable {
     private static final Logger logger = LogManager.getLogger(Producer.class);
     private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private CountDownLatch prodLatch;
+    private List<Phase> phases;
 
-    public Producer(CountDownLatch prodLatch) {
+    public Producer(CountDownLatch prodLatch, List<Phase> phases) {
         this.prodLatch = prodLatch;
+        this.phases = phases;
     }
 
     @Override
@@ -40,6 +42,7 @@ class Producer implements Runnable {
             }
         }
         logger.info("Number generation stopped");
+        phases.add(Phase.GENERATION_FINISHED);
         prodLatch.countDown();
         logger.info("Producer " + nameThread +" terminated.");
     }

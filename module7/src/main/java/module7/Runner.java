@@ -16,7 +16,6 @@ import java.util.concurrent.*;
  */
 public class Runner
 {
-    public static List<Phase> phases = new ArrayList<>();
     public static void main( String[] args ){
         final Logger logger = LogManager.getLogger(Runner.class);
         logger.info("++++++++ Application started ++++++++");
@@ -34,13 +33,16 @@ public class Runner
             ExecutorService threadPool = Executors.newFixedThreadPool(numberOfConsumers + numberOfProducers);
             logger.info("Thread pool created.");
             for (int i = 0; i < numberOfProducers; i++) {
-                threadPool.submit(new Producer(prodLatch));
+                threadPool.submit(new Producer(prodLatch, phases));
             }
+
             for (int i = 0; i < numberOfConsumers; i++) {
-                threadPool.submit(new Consumer(consumLatch));
+                threadPool.submit(new Consumer(consumLatch, phases));
             }
             prodLatch.await();
-         //   phases.add(Phase.PRODUCERS_FINISH);
+            phases.add(Phase.PRODUCERS_FINISH);
+            consumLatch.await();
+
 
             threadPool.shutdown();
             final boolean done = threadPool.awaitTermination(5, TimeUnit.MINUTES);
