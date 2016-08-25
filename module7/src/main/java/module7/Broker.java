@@ -1,9 +1,6 @@
 package module7;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * Helper class. Puts and polls number in queue.
@@ -18,7 +15,7 @@ class Broker {
      * @param value Value of the generated numbers.
      * @throws InterruptedException InterruptedException.
      */
-    static void put(Integer value) throws InterruptedException {
+    static void put(int value) throws InterruptedException {
         queue.put(value);
     }
 

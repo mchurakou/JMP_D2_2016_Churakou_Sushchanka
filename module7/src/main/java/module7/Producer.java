@@ -41,9 +41,12 @@ class Producer implements Runnable {
                 e.printStackTrace();
             }
         }
-        logger.info("Number generation stopped");
-        phases.add(Phase.GENERATION_FINISHED);
+
         prodLatch.countDown();
         logger.info("Producer " + nameThread +" terminated.");
+        if (number == Integer.MIN_VALUE) {
+            logger.info("Number generation stopped");
+            phases.add(Phase.GENERATION_FINISHED);
+        }
     }
 }

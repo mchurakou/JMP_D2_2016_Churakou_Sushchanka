@@ -6,9 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Consumer thread. Handles the number. Transforms number to String and writes numbers into file.
@@ -20,7 +18,6 @@ class Consumer implements Runnable {
     private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private CountDownLatch consumLatch;
     private List<Phase> phases;
-    List<String> resultsList = new ArrayList<>();
 
     Consumer(CountDownLatch consumLatch, List<Phase> phases) {
         this.consumLatch = consumLatch;
@@ -32,17 +29,19 @@ class Consumer implements Runnable {
         Thread.currentThread().setName("Consumer");
         String nameThread = Thread.currentThread().getName();
         int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
-        logger.info("" + nameThread + "started with " + delay);
+        logger.info(nameThread + " started with " + delay);
         while (!Broker.isEmptyQueue() || !phases.contains(Phase.GENERATION_FINISHED)){
             try {
                 TimeUnit.MILLISECONDS.sleep(delay);
                 Integer number = Broker.poll();
-                if (true) {
+//                Inspector inspector = Inspector.getStatus();
+//                if (inspector.globalStatus != null)
+//                    inspector.globalStatus.await();
+//                inspector.localStatus.countDown();
+                System.out.println(number);
+                if (number != null) {
                     String message = Integer.toString(number) + "- number was handled.";
-                    resultsList.add(number, message);
                     taskLogger.info(message);
-                    System.out.println(resultsList.size());
-                    //writeToTile(resultsList);
                 }
             } catch (InterruptedException e) {
                 logger.error(nameThread + "was interrapted.");
@@ -50,13 +49,10 @@ class Consumer implements Runnable {
             }
         }
         consumLatch.countDown();
+
+
     }
 
-    private void writeToTile(List<String> resultsList) {
-        if (resultsList.size() == NumberGenerator.getMaxNumber()) {
-            for (String result : resultsList) {
-                taskLogger.info(result);
-            }
-        } else return;
-    }
+
+
 }

@@ -1,8 +1,5 @@
 package module7;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -14,10 +11,6 @@ class NumberGenerator {
 
     public static void setMaxNumber(int maxNumber) {
         NumberGenerator.maxNumber = maxNumber;
-    }
-
-    public static int getMaxNumber() {
-        return maxNumber;
     }
 
     static int getNumber() {

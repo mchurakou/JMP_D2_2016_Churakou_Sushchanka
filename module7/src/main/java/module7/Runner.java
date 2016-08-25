@@ -28,24 +28,25 @@ public class Runner
             int numberOfProducers = scanner.nextInt();
             System.out.println("Enter the number of consumers:");
             int numberOfConsumers = scanner.nextInt();
+
             CountDownLatch prodLatch = new CountDownLatch(numberOfProducers);
             CountDownLatch consumLatch = new CountDownLatch(numberOfProducers);
-            ExecutorService threadPool = Executors.newFixedThreadPool(numberOfConsumers + numberOfProducers);
+            ExecutorService producersPool = Executors.newFixedThreadPool(numberOfProducers);
+            ExecutorService consumerPool = Executors.newFixedThreadPool(numberOfConsumers);
             logger.info("Thread pool created.");
             for (int i = 0; i < numberOfProducers; i++) {
-                threadPool.submit(new Producer(prodLatch, phases));
+                producersPool.submit(new Producer(new CountDownLatch(numberOfProducers), phases));
+            }
+            for (int i = 0; i < numberOfConsumers; i++) {
+                consumerPool.submit(new Consumer(new CountDownLatch(numberOfProducers), phases));
             }
 
-            for (int i = 0; i < numberOfConsumers; i++) {
-                threadPool.submit(new Consumer(consumLatch, phases));
-            }
             prodLatch.await();
             phases.add(Phase.PRODUCERS_FINISH);
             consumLatch.await();
-
-
-            threadPool.shutdown();
-            final boolean done = threadPool.awaitTermination(5, TimeUnit.MINUTES);
+            producersPool.shutdown();
+            consumerPool.shutdown();
+            final boolean done = (producersPool.awaitTermination(2, TimeUnit.MINUTES)) && (consumerPool.awaitTermination(5, TimeUnit.MINUTES)) ;
             logger.info("All threads terminated? {}", done);
         } catch (InterruptedException e) {
             logger.error("ThreadPool was interrupted.");
