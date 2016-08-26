@@ -1,5 +1,6 @@
 package module7;
 
+import java.util.Comparator;
 import java.util.concurrent.*;
 
 /**
@@ -9,14 +10,14 @@ import java.util.concurrent.*;
  */
 class Broker {
     /** Queue for storing numbers. */
-    private static BlockingQueue <Integer> queue = new ArrayBlockingQueue<>(10);
+    private static BlockingQueue <Item> queue = new PriorityBlockingQueue<>(50);
     /**
      * Puts numbers into queue.
      * @param value Value of the generated numbers.
      * @throws InterruptedException InterruptedException.
      */
     static void put(int value) throws InterruptedException {
-        queue.put(value);
+        queue.put(new Item(value));
     }
 
     /**
@@ -24,11 +25,26 @@ class Broker {
      * @return Value of the generated number from queue.
      * @throws InterruptedException InterruptedException.
      */
-    static Integer poll() throws InterruptedException {
-        return queue.poll();
+    static int poll() throws InterruptedException {
+        return queue.poll().id;
     }
 
-    static Boolean isEmptyQueue() {
+    static synchronized Boolean isEmptyQueue() {
         return queue.isEmpty();
+    }
+
+    static class Item implements Comparable<Item>{
+        int id;
+
+        public Item(int id) {
+            this.id = id;
+        }
+
+        @Override
+        public int compareTo(Item o) {
+            if (o.id > id) return -1;
+            if (id > o.id) return 1;
+            return 0;
+        }
     }
 }

@@ -31,23 +31,24 @@ public class Runner
 
             CountDownLatch prodLatch = new CountDownLatch(numberOfProducers);
             CountDownLatch consumLatch = new CountDownLatch(numberOfProducers);
-            ExecutorService producersPool = Executors.newFixedThreadPool(numberOfProducers);
-            ExecutorService consumerPool = Executors.newFixedThreadPool(numberOfConsumers);
+//            ExecutorService producersPool = Executors.newFixedThreadPool(numberOfProducers);
+//            ExecutorService consumerPool = Executors.newFixedThreadPool(numberOfConsumers);
+            ExecutorService threadPool = Executors.newFixedThreadPool(numberOfConsumers+numberOfProducers);
             logger.info("Thread pool created.");
             for (int i = 0; i < numberOfProducers; i++) {
-                producersPool.submit(new Producer(new CountDownLatch(numberOfProducers), phases));
+                threadPool.submit(new Producer(new CountDownLatch(numberOfProducers), phases));
             }
             for (int i = 0; i < numberOfConsumers; i++) {
-                consumerPool.submit(new Consumer(new CountDownLatch(numberOfProducers), phases));
+                threadPool.submit(new Consumer(new CountDownLatch(numberOfProducers), phases));
             }
 
             prodLatch.await();
             phases.add(Phase.PRODUCERS_FINISH);
             consumLatch.await();
-            producersPool.shutdown();
-            consumerPool.shutdown();
-            final boolean done = (producersPool.awaitTermination(2, TimeUnit.MINUTES)) && (consumerPool.awaitTermination(5, TimeUnit.MINUTES)) ;
-            logger.info("All threads terminated? {}", done);
+//            producersPool.shutdown();
+//            consumerPool.shutdown();
+//            final boolean done = (producersPool.awaitTermination(2, TimeUnit.MINUTES)) && (consumerPool.awaitTermination(5, TimeUnit.MINUTES)) ;
+//            logger.info("All threads terminated? {}", done);
         } catch (InterruptedException e) {
             logger.error("ThreadPool was interrupted.");
             e.printStackTrace();

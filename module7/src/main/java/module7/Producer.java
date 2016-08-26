@@ -18,6 +18,7 @@ class Producer implements Runnable {
     private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private CountDownLatch prodLatch;
     private List<Phase> phases;
+    int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
 
     public Producer(CountDownLatch prodLatch, List<Phase> phases) {
         this.prodLatch = prodLatch;
@@ -28,10 +29,9 @@ class Producer implements Runnable {
     public void run() {
         Thread.currentThread().setName("Producer");
         String nameThread = Thread.currentThread().getName();
-        int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
         int number;
         while ((number = NumberGenerator.getNumber()) != Integer.MIN_VALUE) {
-            System.out.println(nameThread + " started with number - " + number + ", delay: " + delay);
+            logger.info(nameThread + " started with number - " + number + ", delay: " + delay);
             try {
                 TimeUnit.MILLISECONDS.sleep(delay);
                 Broker.put(number);
