@@ -10,7 +10,7 @@ import java.util.concurrent.*;
  */
 class Broker {
     /** Queue for storing numbers. */
-    private static BlockingQueue <Item> queue = new PriorityBlockingQueue<>(50);
+    private static BlockingQueue <Item> queue = new PriorityBlockingQueue<>(10, Item::compareTo);
     /**
      * Puts numbers into queue.
      * @param value Value of the generated numbers.

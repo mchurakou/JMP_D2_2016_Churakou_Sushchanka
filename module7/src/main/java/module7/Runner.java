@@ -30,7 +30,7 @@ public class Runner
             int numberOfConsumers = scanner.nextInt();
 
             CountDownLatch prodLatch = new CountDownLatch(numberOfProducers);
-            CountDownLatch consumLatch = new CountDownLatch(numberOfProducers);
+            CountDownLatch consumLatch = new CountDownLatch(numberOfConsumers);
 //            ExecutorService producersPool = Executors.newFixedThreadPool(numberOfProducers);
 //            ExecutorService consumerPool = Executors.newFixedThreadPool(numberOfConsumers);
             ExecutorService threadPool = Executors.newFixedThreadPool(numberOfConsumers+numberOfProducers);
@@ -38,10 +38,10 @@ public class Runner
             for (int i = 0; i < numberOfProducers; i++) {
                 threadPool.submit(new Producer(new CountDownLatch(numberOfProducers), phases));
             }
-            for (int i = 0; i < numberOfConsumers; i++) {
-                threadPool.submit(new Consumer(new CountDownLatch(numberOfProducers), phases));
-            }
 
+            for (int i = 0; i < numberOfConsumers; i++) {
+                threadPool.submit(new Consumer(new CountDownLatch(numberOfConsumers), phases));
+            }
             prodLatch.await();
             phases.add(Phase.PRODUCERS_FINISH);
             consumLatch.await();
