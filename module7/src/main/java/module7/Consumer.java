@@ -38,7 +38,7 @@ class Consumer implements Runnable {
             try {
                 TimeUnit.MILLISECONDS.sleep(delay);
                 Integer number = Broker.poll();
-                System.out.println(number +"" + syncNumber);
+                logger.info(number +"" + syncNumber);
                 if (number != null ) {
                      if (number == syncNumber.get()) {
                          String message = Integer.toString(number) + "- number was handled.";
