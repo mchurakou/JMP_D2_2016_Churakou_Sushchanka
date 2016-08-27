@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="error" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
+<Configuration status="debug" strict="true" name="XMLConfigTest" packages="org.apache.logging.log4j.test">
     <Properties>
         <Property name="debug">target/debug.log</Property>
         <Property name="concurrencyInfo">target/concurrency.log</Property>
@@ -26,7 +26,7 @@
             <AppenderRef ref="ConcurrencyInfoFile" level="All"/>
         </Logger>
 
-        <Root level="all">
+        <Root level="debug">
             <!--<AppenderRef ref="appenderConsole" />-->
             <AppenderRef ref="DebugFile"/>
         </Root>

@@ -4,9 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import java.util.Queue;
+import java.util.concurrent.*;
 
 /**
  * Producer thread. Uses the NumberGenerator to obtain the new number and delivers numbers to queue.
@@ -15,38 +14,31 @@ import java.util.concurrent.TimeUnit;
  */
 class Producer implements Runnable {
     private static final Logger logger = LogManager.getLogger(Producer.class);
-    private static final Logger taskLogger = LogManager.getLogger("ConcurrencyTaskLogger");
     private CountDownLatch prodLatch;
-    private List<Phase> phases;
-    int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
+    private BlockingQueue<Integer> queue;
+    private int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
 
-    public Producer(CountDownLatch prodLatch, List<Phase> phases) {
+    Producer(CountDownLatch prodLatch, BlockingQueue<Integer> queue) {
         this.prodLatch = prodLatch;
-        this.phases = phases;
+        this.queue = queue;
+        Thread.currentThread().setName("Producer"+Thread.currentThread().getName());
     }
 
     @Override
     public void run() {
-        Thread.currentThread().setName("Producer");
         String nameThread = Thread.currentThread().getName();
         int number;
         while ((number = NumberGenerator.getNumber()) != Integer.MIN_VALUE) {
             logger.info(nameThread + " started with number - " + number + ", delay: " + delay);
             try {
                 TimeUnit.MILLISECONDS.sleep(delay);
-                Broker.put(number);
-                logger.info("Added " + number + "to queue.");
+                logger.info("Add " + number + "to queue.");
+                queue.put(number);
             } catch (InterruptedException e) {
                 logger.error("Producer" + nameThread + "was interrapted.");
                 e.printStackTrace();
             }
         }
-
         prodLatch.countDown();
-        logger.info("Producer " + nameThread +" terminated.");
-        if (number == Integer.MIN_VALUE) {
-            logger.info("Number generation stopped");
-            phases.add(Phase.GENERATION_FINISHED);
-        }
     }
 }
