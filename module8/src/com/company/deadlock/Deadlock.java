@@ -1,4 +1,4 @@
-package com.company;
+package com.company.deadlock;
 
 /**
  * Created by alt-hanny on 28.08.2016.
