@@ -19,43 +19,36 @@ class Consumer implements Runnable {
     private CountDownLatch consumLatch;
     private CyclicBarrier consumersBarrier;
     private BlockingQueue<Integer> queue;
-    private Integer number;
+    private String message;
+    private SortedSet<String> resultSet;
     private int delay = ThreadLocalRandom.current().nextInt(1000, 2000);
-    private SortedSet<String> result;
 
-    Consumer(CountDownLatch consumLatch, CyclicBarrier consumersBarrier, BlockingQueue<Integer> queue) {
+    Consumer(CountDownLatch consumLatch, CyclicBarrier consumersBarrier, BlockingQueue<Integer> queue, SortedSet<String> resultSet) {
         this.consumLatch = consumLatch;
         this.consumersBarrier = consumersBarrier;
         this.queue = queue;
+        this.resultSet = resultSet;
     }
 
-    public SortedSet<String> getResult() {
-        return result;
+    public String getMessage() {
+        return message;
     }
 
     @Override
     public void run() {
-        result = Collections.synchronizedSortedSet(new TreeSet<>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                Integer n1 = Integer.parseInt(o1.split("-")[0].trim());
-                Integer n2 = Integer.parseInt(o2.split("-")[0].trim());
-                return n1 - n2;
-            }
-        }));
         String nameThread = Thread.currentThread().getName();
         logger.info(nameThread + " started with " + delay);
         while (!queue.isEmpty() || Runner.isProdusersFinished.getCount() != 0 ) {
             try {
-                if (result.size() != NumberGenerator.getMaxNumber()) {
-                    number = queue.take();
+                if (resultSet.size() != NumberGenerator.getMaxNumber()) {
+                    Integer number = queue.take();
+                    message = number + " - number was handled.";
                     TimeUnit.MILLISECONDS.sleep(delay);
-                    String message = number + " - number was handled.";
                     logger.info(message);
                     consumersBarrier.await();
                 }
             } catch (BrokenBarrierException | InterruptedException e) {
-                logger.error(nameThread + "was interrapted.");
+                logger.error(nameThread + "was interrupted.");
                 e.printStackTrace();
             }
         }

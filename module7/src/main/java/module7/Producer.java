@@ -20,7 +20,6 @@ class Producer implements Runnable {
     Producer(CountDownLatch prodLatch, CyclicBarrier producersBarrier) {
         this.prodLatch = prodLatch;
         this.producersBarrier = producersBarrier;
-        Thread.currentThread().setName("Producer"+Thread.currentThread().getName());
     }
 
     int getNumber() {
@@ -36,7 +35,7 @@ class Producer implements Runnable {
                 TimeUnit.MILLISECONDS.sleep(delay);
                 producersBarrier.await();
             } catch (BrokenBarrierException|InterruptedException e) {
-                logger.error("Producer" + nameThread + "was interrapted.");
+                logger.error("Producer" + nameThread + "was interrupted.");
                 e.printStackTrace();
             }
         }
