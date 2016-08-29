@@ -43,11 +43,13 @@ class Consumer implements Runnable {
         while (!queue.isEmpty() || Runner.isProdusersFinished.getCount() != 0 ) {
             try {
                 TimeUnit.MILLISECONDS.sleep(delay);
-                if (result.size() != NumberGenerator.getMaxNumber()) {
-                    Integer number = queue.take();
-                    String message = number + " - number was handled.";
-                    logger.info(message);
-                    result.add(message);
+                synchronized (queue) {
+                    if (result.size() != NumberGenerator.getMaxNumber()) {
+                        Integer number = queue.take();
+                        String message = number + " - number was handled.";
+                        logger.info(message);
+                        result.add(message);
+                    }
                 }
             } catch (InterruptedException e) {
                 logger.error(nameThread + "was interrapted.");
