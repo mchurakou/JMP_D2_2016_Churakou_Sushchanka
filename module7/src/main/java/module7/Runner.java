@@ -4,16 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
-import static module7.Consumer.result;
-
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 /**
  * Runner for the application. Creates N producers and M consumers.
  *
@@ -28,6 +21,10 @@ public class Runner
         logger.info("++++++++ Application started ++++++++");
 
         try (Scanner scanner = new Scanner(System.in)) {
+//            System.out.println("Enter the number of the producers in the party: ");
+//            int producersParty = scanner.nextInt();
+//            System.out.println("Enter the number of the consumers in the party: ");
+//            int consumersParty = scanner.nextInt();
             System.out.println("Enter the maximum number of generated numbers:");
             int maxNumbers = scanner.nextInt();
             NumberGenerator.setMaxNumber(maxNumbers);
@@ -38,16 +35,37 @@ public class Runner
 
             BlockingQueue<Integer> queue = new PriorityBlockingQueue<>(10);
 
+            List<Producer> producers = new ArrayList<>();
+            CyclicBarrier producersBarrier = new CyclicBarrier(numberOfProducers, () -> {
+                logger.info("Barrier action");
+                queue.addAll(producers.stream().map(Producer::getNumber).collect(Collectors.toList()));
+            });
+
+            List<Consumer> consumers = new ArrayList<>();
+            CyclicBarrier consumersBarrier = new CyclicBarrier(numberOfConsumers, () -> {
+                for (Consumer consumer: consumers) {
+                    SortedSet<String> result = consumer.getResult();
+                    for (String message : result) {
+                        taskLogger.info(message);
+                    }
+                }
+            });
+
             CountDownLatch prodLatch = new CountDownLatch(numberOfProducers);
             CountDownLatch consumLatch = new CountDownLatch(numberOfConsumers);
 
-            Producer producer = new Producer(prodLatch, queue);
-            Consumer consumer = new Consumer(consumLatch, queue);
             ExecutorService threadPool = Executors.newFixedThreadPool(numberOfProducers + numberOfConsumers);
-            for(int i = 0; i < numberOfProducers; i++)
+            for(int i = 0; i < numberOfProducers; i++) {
+                Producer producer = new Producer(prodLatch, producersBarrier);
+                producers.add(producer);
                 threadPool.submit(producer);
-            for (int i = 0; i < numberOfConsumers; i++)
+            }
+
+            for (int i = 0; i < numberOfConsumers; i++) {
+                Consumer consumer = new Consumer(consumLatch, consumersBarrier, queue);
+                consumers.add(consumer);
                 threadPool.submit(consumer);
+            }
 
             prodLatch.await();
             isProdusersFinished.countDown();
@@ -55,7 +73,6 @@ public class Runner
             threadPool.shutdown();
             final boolean done = (threadPool.awaitTermination(15, TimeUnit.SECONDS));
             logger.info("All threads terminated? {}", done);
-            result.forEach(taskLogger::info);
         } catch (InterruptedException e) {
             logger.error("ThreadPool was interrupted.");
             e.printStackTrace();
