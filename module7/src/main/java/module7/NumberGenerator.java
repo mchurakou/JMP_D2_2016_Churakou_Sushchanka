@@ -9,8 +9,12 @@ class NumberGenerator {
     static private AtomicInteger numberAtomic = new AtomicInteger();
     static private int maxNumber;
 
-    public static void setMaxNumber(int maxNumber) {
+    static void setMaxNumber(int maxNumber) {
         NumberGenerator.maxNumber = maxNumber;
+    }
+
+    static int getMaxNumber() {
+        return maxNumber;
     }
 
     static int getNumber() {
