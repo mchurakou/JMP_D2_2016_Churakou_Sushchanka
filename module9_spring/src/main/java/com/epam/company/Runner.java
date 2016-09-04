@@ -1,6 +1,8 @@
 package com.epam.company;
 
-import com.epam.company.beans.*;
+import com.epam.company.beans.A;
+import com.epam.company.beans.B;
+import com.epam.company.beans.F;
 import com.epam.company.interfaces.DemoBean;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,10 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/**
- * Hello world!
- *
- */
 public class Runner
 {
     public static void main( String[] args )
