@@ -2,6 +2,7 @@ package com.epam.company.beans;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
  * Created by alt-hanny on 04.09.2016.

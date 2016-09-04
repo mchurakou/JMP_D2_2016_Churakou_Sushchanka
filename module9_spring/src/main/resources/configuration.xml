@@ -24,4 +24,5 @@
     <bean id="F" class="com.epam.company.beans.F" lazy-init="true" init-method="init" destroy-method="destroy">
         <property name="pointOfTask" value="Point 5: Life cycle of Spring bean."/>
     </bean>
+    <bean class="com.epam.company.beans.CustomPostProcessor"/>
 </beans>
