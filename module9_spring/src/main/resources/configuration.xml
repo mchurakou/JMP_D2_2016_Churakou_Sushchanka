@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="A" class="com.epam.company.beans.A">
+        <property name="somePropertyA" value="test" />
+    </bean>
+    <bean id="B" class="com.epam.company.beans.B">
+        <constructor-arg ref="A"/>
+    </bean>
+    <bean id="AbstractLookupC" class="com.epam.company.beans.AbstractLookupC">
+        <lookup-method name="getD" bean="D"/>
+    </bean>
+    <bean id="StandartLookupC" class="com.epam.company.beans.StandartLookupC">
+        <property name="d">
+            <ref bean="D"/>
+        </property>
+    </bean>
+    <bean id="D" class="com.epam.company.beans.D" scope="prototype"/>
+    <bean id="E" class="com.epam.company.beans.E"/>
+    <bean id = "replacementA" class="com.epam.company.beans.A">
+        <replaced-method name="helperForReplacementMethodTest" replacer="E"/>
+    </bean>
+    <bean id="F" class="com.epam.company.beans.F" lazy-init="true" init-method="init" destroy-method="destroy">
+        <property name="pointOfTask" value="Point 5: Life cycle of Spring bean."/>
+    </bean>
+</beans>
