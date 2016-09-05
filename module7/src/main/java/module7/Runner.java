@@ -21,13 +21,12 @@ public class Runner
         logger.info("++++++++ Application started ++++++++");
 
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Enter the maximum number of generated numbers:");
-            int maxNumbers = scanner.nextInt();
-            NumberGenerator.setMaxNumber(maxNumbers);
+
             System.out.println("Enter the number of producers:");
             int numberOfProducers = scanner.nextInt();
             System.out.println("Enter the number of consumers:");
             int numberOfConsumers = scanner.nextInt();
+            NumberGenerator.setMaxNumber(numberOfProducers*numberOfConsumers);
 
             BlockingQueue<Integer> queue = new PriorityBlockingQueue<>(10);
             SortedSet<String> result = Collections.synchronizedSortedSet(new TreeSet<>(new Comparator<String>() {
