@@ -1,9 +1,11 @@
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.*;
 
 /**
  * Implements the creator with database.
@@ -18,6 +20,9 @@ public class HeandlerDBImpl {
     private static final String CREATE_FRIENDSSHIPS_TABLE = "CREATE_FRIENDSSHIPS_TABLE";
     private static final String CREATE_POSTS_TABLE = "CREATE_POSTS_TABLE";
     private static final String CREATE_LIKES_TABLE = "CREATE_LIKES_TABLE";
+    private static final String INSERT_USER = "INSERT_USER";
+    private static final String INSERT_FRIENDSHIP = "INSERT_FRIENDSHIP";
+
 
 
     /** Gets connection. */
@@ -61,45 +66,50 @@ public class HeandlerDBImpl {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        logger.info("Tables were created.");
     }
 
-//    /**
-//     * Writes the person to database.
-//     * @param person Person.
-//     */
-//    public void writePerson(Person person) {
-//        String query = queriesFactory.getQuery(WRITE_PERSON);
-//
-//        try ( Connection connection = connectionDAO.getConnection();
-//              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-//            preparedStatement.setLong(1, person.getId());
-//            preparedStatement.setString(2, person.getName());
-//            preparedStatement.setInt(3, person.getAge());
-//            preparedStatement.executeUpdate();
-//        } catch (SQLException | IllegalArgumentException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    /**
-//     * Reads the person from database.
-//     * @return Person.
-//     */
-//    public Person readPerson() {
-//        String query = queriesFactory.getQuery(READ_PERSON);
-//        Person person = null;
-//        try ( Connection connection = connectionDAO.getConnection();
-//              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                while (resultSet.next()) {
-//                    person = createPerson(resultSet);
-//                }
-//            }
-//        } catch (SQLException | IllegalArgumentException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return person;
-//    }
+    /**
+     * Fills the Users table.
+     */
+    public void fillUsers() {
+        String query = queriesFactory.getQuery(INSERT_USER);
+
+        try (Connection connection = connectionDAO.getConnection();
+              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+           try (FileReader fileReader = new FileReader("module10/src/main/resources/users.csv");
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+               String line;
+               while ((line = bufferedReader.readLine()) != null) {
+                   String[] userData = line.split(",");
+                   String userName = userData[0];
+                   String userSurname = userData[1];
+                   preparedStatement.setString(1, userName);
+                   preparedStatement.setString(2, userSurname);
+                   preparedStatement.setTimestamp(3, DBUtils.generateRandomTimastamp());
+                   preparedStatement.executeUpdate();
+               }
+           }
+        } catch (IOException | SQLException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Fills the friendships table.
+     */
+    public void fillFriendships () {
+        String query = queriesFactory.getQuery(INSERT_FRIENDSHIP);
+        try ( Connection connection = connectionDAO.getConnection();
+              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            for(int i = 0; i < 70000; i++) {
+//                preparedStatement.setInt(1, );
+            }
+
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
 //
 //    /**
 //     * Reads the person by name from database.

@@ -11,6 +11,7 @@ public class Runner {
     public static void main(String[] args) {
         HeandlerDBImpl heandlerDB = new HeandlerDBImpl();
         heandlerDB.createTables();
-        logger.info("Tables were created.");
+        heandlerDB.fillUsers();
+
     }
 }
