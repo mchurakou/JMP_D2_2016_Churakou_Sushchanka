@@ -20,7 +20,7 @@ public enum QueriesEnum {
         public String getQuery() {
             return "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT NOT NULL," +
                     "name VARCHAR(250) NOT NULL, surname VARCHAR(250) NOT NULL, " +
-                    "birthday TIMESTAMP NOT NULL, PRIMARY KEY (id), UNIQUE INDEX id_unique (id ASC))";
+                    "birthday Date NOT NULL, PRIMARY KEY (id), UNIQUE INDEX id_unique (id ASC))";
         }
     },
     CREATE_FRIENDSSHIPS_TABLE {

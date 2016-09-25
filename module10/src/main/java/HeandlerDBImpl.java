@@ -86,7 +86,7 @@ public class HeandlerDBImpl {
                    String userSurname = userData[1];
                    preparedStatement.setString(1, userName);
                    preparedStatement.setString(2, userSurname);
-                   preparedStatement.setTimestamp(3, DBUtils.generateRandomTimastamp());
+                   preparedStatement.setDate(3, DBUtils.generateRandomDate(1930, 2006));
                    preparedStatement.executeUpdate();
                }
            }
