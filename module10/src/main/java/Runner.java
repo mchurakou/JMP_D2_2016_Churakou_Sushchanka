@@ -12,6 +12,9 @@ public class Runner {
         HeandlerDBImpl heandlerDB = new HeandlerDBImpl();
         heandlerDB.createTables();
         heandlerDB.fillUsers();
+        heandlerDB.fillFriendships();
+        heandlerDB.fillPosts();
+        heandlerDB.fillLikes();
 
     }
 }
