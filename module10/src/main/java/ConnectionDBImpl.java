@@ -14,7 +14,7 @@ public class ConnectionDBImpl
     /** JDBC driver name. */
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     /**  Database URL.*/
-    static final String DB_URL = "jdbc:mysql://localhost:3306/module10";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/module10?rewriteBatchedStatements=true";
     /** Database credentials. */
     static final String USER = "root";
     static final String PASS = "admin";

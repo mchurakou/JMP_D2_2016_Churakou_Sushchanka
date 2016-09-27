@@ -1,6 +1,7 @@
 import beans.Friendship;
 import beans.Like;
 import beans.Post;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -43,6 +44,21 @@ public class HeandlerDBImpl {
         }
     }
 
+    public void resultExecution() {
+        final String query = queriesFactory.getQuery(QueriesEnum.RESULT_QUERY.name());
+        try (Connection connection = connectionDAO.getConnection();
+             Statement statement = connection.createStatement()) {
+             ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String tmp = "";
+                tmp += resultSet.getString("user_name") + " " + resultSet.getString("user_surname") + " | ";
+                tmp += "Likes: " + resultSet.getInt("likes_count") + ", " + "Friends: " + resultSet.getInt("friends_count");
+                System.out.println(tmp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Creates tables.
      * @throws SQLException
@@ -67,24 +83,25 @@ public class HeandlerDBImpl {
     /**
      * Fills the Users table.
      */
-    public void fillUsers() {
+    public void fillUsers() throws SQLException {
         String query = queriesFactory.getQuery(QueriesEnum.INSERT_USER.name());
 
         try (Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-           try (FileReader fileReader = new FileReader("module10/src/main/resources/users.csv");
+            try (FileReader fileReader = new FileReader("module10/src/main/resources/users.csv");
                 BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-               String line;
-               while ((line = bufferedReader.readLine()) != null) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
                    String[] userData = line.split(",");
                    String userName = userData[0];
                    String userSurname = userData[1];
                    preparedStatement.setString(1, userName);
                    preparedStatement.setString(2, userSurname);
                    preparedStatement.setDate(3, DBUtils.generateRandomDate(1930, 2006));
-                   preparedStatement.executeUpdate();
-               }
-           }
+                   preparedStatement.addBatch();
+                }
+            }
+            preparedStatement.executeBatch();
         } catch (IOException | SQLException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
@@ -93,7 +110,7 @@ public class HeandlerDBImpl {
     /**
      * Fills the friendships table.
      */
-    public void fillFriendships () {
+    public void fillFriendships () throws SQLException {
         String query = queriesFactory.getQuery(QueriesEnum.INSERT_FRIENDSHIP.name());
         try ( Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -102,9 +119,9 @@ public class HeandlerDBImpl {
                 preparedStatement.setInt(1, friendship.getUserId1());
                 preparedStatement.setInt(2, friendship.getUserId2());
                 preparedStatement.setTimestamp(3, friendship.getTimestamp());
-                preparedStatement.executeUpdate();
+                preparedStatement.addBatch();
             }
-
+            preparedStatement.executeBatch();
         } catch (SQLException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
@@ -113,36 +130,37 @@ public class HeandlerDBImpl {
     /**
      * Fills the friendships table.
      */
-    public void fillPosts() {
+    public void fillPosts() throws SQLException {
         String query = queriesFactory.getQuery(QueriesEnum.INSERT_POST.name());
         try ( Connection connection = connectionDAO.getConnection();
-              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             List<Post> postsList = DBUtils.generatePosts();
             for(Post post : postsList) {
-                preparedStatement.setInt(1, post.getId());
-                preparedStatement.setInt(2, post.getUserId());
-                preparedStatement.setString(3, post.getText());
-                preparedStatement.setTimestamp(4, post.getTimestamp());
-                preparedStatement.executeUpdate();
+                preparedStatement.setInt(1, post.getUserId());
+                preparedStatement.setString(2, post.getText());
+                preparedStatement.setTimestamp(3, post.getTimestamp());
+                preparedStatement.addBatch();
             }
-
-        } catch (SQLException | IllegalArgumentException e) {
+            preparedStatement.executeBatch();
+        }
+        catch (SQLException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void fillLikes() {
+    public void fillLikes() throws SQLException {
         String query = queriesFactory.getQuery(QueriesEnum.INSERT_LIKE.name());
-        try ( Connection connection = connectionDAO.getConnection();
-              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            List<Like> likesList = DBUtils.generateLikes();
-            for(Like like : likesList) {
-                preparedStatement.setInt(1, like.getPostId());
-                preparedStatement.setInt(2, like.getUserId());
-                preparedStatement.setTimestamp(3, like.getTimestamp());
-                preparedStatement.executeUpdate();
+        try ( Connection connection = connectionDAO.getConnection()){
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+                List<Like> likesList = DBUtils.generateLikes();
+                for (Like like : likesList) {
+                    preparedStatement.setInt(1, like.getPostId());
+                    preparedStatement.setInt(2, like.getUserId());
+                    preparedStatement.setTimestamp(3, like.getTimestamp());
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
             }
-
         } catch (SQLException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }

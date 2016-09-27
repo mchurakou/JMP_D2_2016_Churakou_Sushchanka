@@ -16,13 +16,24 @@ import static java.sql.Timestamp.valueOf;
  * Created by alt-hanny on 14.09.2016.
  */
 public class DBUtils {
-    private static final int AMOUNT_USERS = 1000;
+    private static final int AMOUNT_USERS = 100;
 
-    public static Timestamp generateRandomTimastamp(String beginning, String ending ) {
-        long offset = valueOf(beginning).getTime();
-        long end = valueOf(ending).getTime();
-        long diff = end - offset + 1;
-        Timestamp randomTimestamp = new Timestamp(offset + (long)(Math.random() * diff));
+    public static Timestamp generateRandomTimestamp(String beginning, String ending ) {
+        Timestamp randomTimestamp;
+        boolean generated;
+        do {
+            generated = false;
+            long offset = valueOf(beginning).getTime();
+            long end = valueOf(ending).getTime();
+            long diff = end - offset + 1;
+            randomTimestamp = new Timestamp(offset + (long) (Math.random() * diff));
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.setTime(randomTimestamp);
+            if (calendar.get(GregorianCalendar.MONTH) == GregorianCalendar.MARCH) {
+                generated = true;
+            }
+        } while (generated);
+
         return randomTimestamp;
     }
 
@@ -47,7 +58,7 @@ public class DBUtils {
                     Friendship friendship = new Friendship();
                     friendship.setUserId1(i);
                     friendship.setUserId2(j);
-                    friendship.setTimestamp(generateRandomTimastamp("2010-01-01 00:00:00","2016-09-26 00:00:00"));
+                    friendship.setTimestamp (generateRandomTimestamp("2010-04-01 00:00:00","2016-09-26 00:00:00"));
                     friendshipsList.add(friendship);
                 }
             }
@@ -57,12 +68,11 @@ public class DBUtils {
     
     public static List<Post> generatePosts() {
         List<Post> postsList = new ArrayList<>();
-        String text = RandomTextGenerator.randomString(new Random().nextInt(100));
-        for (int i = 1; i < AMOUNT_USERS; i++) {
+        for (int i = 1; i <= AMOUNT_USERS; i++) {
             Post post = new Post();
             post.setUserId(i);
-            post.setText(text);
-            post.setTimestamp(DBUtils.generateRandomTimastamp("2010-01-01 00:00:00","2016-09-26 00:00:00"));
+            post.setText(RandomTextGenerator.randomString(new Random().nextInt(100)));
+            post.setTimestamp(DBUtils.generateRandomTimestamp("2010-01-01 00:00:00","2016-09-26 00:00:00"));
             postsList.add(post);
         }
         return postsList;
@@ -70,18 +80,17 @@ public class DBUtils {
 
     public static List<Like> generateLikes() {
         List<Like> likesList = new ArrayList<>();
-        for (int i = 1; i < AMOUNT_USERS; i++) {
-            for (int j = 1; j < AMOUNT_USERS; j++){
+        for (int i = 1; i <= AMOUNT_USERS; i++) {
+            for (int j = 1; j <= AMOUNT_USERS; j++) {
                 if (i != j) {
                     Like like = new Like();
                     like.setPostId(i);
                     like.setUserId(j);
-                    like.setTimestamp(DBUtils.generateRandomTimastamp("2010-01-01 00:00:00","2016-09-26 00:00:00"));
+                    like.setTimestamp(DBUtils.generateRandomTimestamp("2010-01-01 00:00:00","2016-09-26 00:00:00"));
                     likesList.add(like);
                 }
             }
         }
         return likesList;
     }
-
 }
