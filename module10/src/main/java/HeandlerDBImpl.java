@@ -1,3 +1,6 @@
+import beans.Friendship;
+import beans.Like;
+import beans.Post;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -6,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 
 /**
  * Implements the creator with database.
@@ -16,15 +20,6 @@ public class HeandlerDBImpl {
     private static final String CREATE_DATABASE = "CREATE_DB";
     /** Constant for the writing person query. */
     private static final String DROP_TABLES = "DROP_TABLES";
-    private static final String CREATE_USERS_TABLE = "CREATE_USERS_TABLE";
-    private static final String CREATE_FRIENDSSHIPS_TABLE = "CREATE_FRIENDSSHIPS_TABLE";
-    private static final String CREATE_POSTS_TABLE = "CREATE_POSTS_TABLE";
-    private static final String CREATE_LIKES_TABLE = "CREATE_LIKES_TABLE";
-    private static final String INSERT_USER = "INSERT_USER";
-    private static final String INSERT_FRIENDSHIP = "INSERT_FRIENDSHIP";
-
-
-
     /** Gets connection. */
     private ConnectionDBImpl connectionDAO = new DBFactoryDAO().getDAO();
     /** Queries factory. */
@@ -53,10 +48,10 @@ public class HeandlerDBImpl {
      * @throws SQLException
      */
     public void createTables() {
-        String creatingUserTableQuery = queriesFactory.getQuery(CREATE_USERS_TABLE);
-        String creatingFriendsShipsTableQuery = queriesFactory.getQuery(CREATE_FRIENDSSHIPS_TABLE);
-        String creatingPostsTableQuery = queriesFactory.getQuery(CREATE_POSTS_TABLE);
-        String creatingLikesTableQuery = queriesFactory.getQuery(CREATE_LIKES_TABLE);
+        String creatingUserTableQuery = queriesFactory.getQuery(QueriesEnum.CREATE_USERS_TABLE.name());
+        String creatingFriendsShipsTableQuery = queriesFactory.getQuery(QueriesEnum.CREATE_FRIENDSSHIPS_TABLE.name());
+        String creatingPostsTableQuery = queriesFactory.getQuery(QueriesEnum.CREATE_POSTS_TABLE.name());
+        String creatingLikesTableQuery = queriesFactory.getQuery(QueriesEnum.CREATE_LIKES_TABLE.name());
         try (Connection connection = connectionDAO.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(creatingUserTableQuery);
@@ -73,7 +68,7 @@ public class HeandlerDBImpl {
      * Fills the Users table.
      */
     public void fillUsers() {
-        String query = queriesFactory.getQuery(INSERT_USER);
+        String query = queriesFactory.getQuery(QueriesEnum.INSERT_USER.name());
 
         try (Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -99,53 +94,57 @@ public class HeandlerDBImpl {
      * Fills the friendships table.
      */
     public void fillFriendships () {
-        String query = queriesFactory.getQuery(INSERT_FRIENDSHIP);
+        String query = queriesFactory.getQuery(QueriesEnum.INSERT_FRIENDSHIP.name());
         try ( Connection connection = connectionDAO.getConnection();
               PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            for(int i = 0; i < 70000; i++) {
-//                preparedStatement.setInt(1, );
+            List<Friendship> friendshipList = DBUtils.generateFriendships();
+            for(Friendship friendship : friendshipList) {
+                preparedStatement.setInt(1, friendship.getUserId1());
+                preparedStatement.setInt(2, friendship.getUserId2());
+                preparedStatement.setTimestamp(3, friendship.getTimestamp());
+                preparedStatement.executeUpdate();
             }
 
         } catch (SQLException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
-//
-//    /**
-//     * Reads the person by name from database.
-//     * @param name Person's name.
-//     * @return Object Person.
-//     */
-//    public Person readPerson(String name) {
-//        String query = queriesFactory.getQuery(READ_PERSON_BY_NAME);
-//
-//        Person person = null;
-//
-//        try ( Connection connection = connectionDAO.getConnection();
-//              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-//            preparedStatement.setString(1, name);
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                while (resultSet.next()) {
-//                    person = createPerson(resultSet);
-//                }
-//            }
-//        } catch (SQLException | IllegalArgumentException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return person;
-//    }
-//
-//    /**
-//     * Creates the person.
-//     * @param resultSet result set.
-//     * @return Person.
-//     * @throws SQLException
-//     */
-//    private Person createPerson (ResultSet resultSet) throws SQLException {
-//        Person person = new Person();
-//        person.setId(resultSet.getInt(Constants.PERSON_ID));
-//        person.setName(resultSet.getString(Constants.PERSON_NAME));
-//        person.setAge(resultSet.getInt(Constants.PERSON_AGE));
-//        return person;
-//    }
+
+    /**
+     * Fills the friendships table.
+     */
+    public void fillPosts() {
+        String query = queriesFactory.getQuery(QueriesEnum.INSERT_POST.name());
+        try ( Connection connection = connectionDAO.getConnection();
+              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<Post> postsList = DBUtils.generatePosts();
+            for(Post post : postsList) {
+                preparedStatement.setInt(1, post.getId());
+                preparedStatement.setInt(2, post.getUserId());
+                preparedStatement.setString(3, post.getText());
+                preparedStatement.setTimestamp(4, post.getTimestamp());
+                preparedStatement.executeUpdate();
+            }
+
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void fillLikes() {
+        String query = queriesFactory.getQuery(QueriesEnum.INSERT_LIKE.name());
+        try ( Connection connection = connectionDAO.getConnection();
+              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<Like> likesList = DBUtils.generateLikes();
+            for(Like like : likesList) {
+                preparedStatement.setInt(1, like.getPostId());
+                preparedStatement.setInt(2, like.getUserId());
+                preparedStatement.setTimestamp(3, like.getTimestamp());
+                preparedStatement.executeUpdate();
+            }
+
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

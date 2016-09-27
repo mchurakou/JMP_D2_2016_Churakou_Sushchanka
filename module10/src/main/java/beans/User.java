@@ -1,7 +1,7 @@
-package main.java.beans;
+package beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * Created by alt-hanny on 25.09.2016.
@@ -10,7 +10,7 @@ public class User implements Serializable {
     private int id;
     private String firstName;
     private String lastName;
-    private Timestamp birthday;
+    private Date birthday;
 
     public int getId() {
         return id;
@@ -28,19 +28,30 @@ public class User implements Serializable {
         this.firstName = firstName;
     }
 
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
     public String getLastName() {
         return lastName;
+
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public Timestamp getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Timestamp birthday) {
-        this.birthday = birthday;
+    @Override
+    public String toString() {
+        final StringBuilder stringBuilder = new StringBuilder("User: ");
+        stringBuilder.append("id=").append(id);
+        stringBuilder.append(" firstName=").append(firstName);
+        stringBuilder.append(" lastName=").append(lastName);
+        stringBuilder.append(" birthdate=").append(birthday);
+        return stringBuilder.toString();
     }
 }
