@@ -1,8 +1,4 @@
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.SQLException;
-
 
 /**
  * Created by alt-hanny on 13.09.2016.
