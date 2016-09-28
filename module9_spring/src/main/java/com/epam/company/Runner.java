@@ -30,17 +30,21 @@ public class Runner
         logger.info("------------3-----------");
         DemoBean abstractLookupBeanC = (DemoBean) context.getBean("AbstractLookupC");
         logger.info("Message from D via Abstract Lookup Method Injection in C: " + abstractLookupBeanC.getD().doSomethingD());
-        DemoBean standartLookupBeanC = (DemoBean) context.getBean("StandartLookupC");
-        logger.info("Message from D via Standart Lookup Method Injection in C: " + standartLookupBeanC.getD().doSomethingD());
         // 4. Create bean E and replace logic of one of his method by Method Replacement.
         logger.info("------------4-----------");
         a.helperForReplacementMethodTest();
         A e = (A)context.getBean("replacementA");
         e.helperForReplacementMethodTest();
+        ((AbstractApplicationContext)context).registerShutdownHook();
+        ((AbstractApplicationContext)context).refresh();
         // 5. Create bean F and log all possible steps from his lifecycle (lifecycle of Spring bean).
         logger.info("------------5-----------");
-        F f = (F) context.getBean("F");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("beanF.xml");
+        F f = (F) applicationContext.getBean("F");
+//        f.printName();
+//        f.useBeanFactory();
         logger.info(f.getPointOfTask());
-        ((AbstractApplicationContext)context).registerShutdownHook();
+        ((AbstractApplicationContext)applicationContext).registerShutdownHook();
+        ((AbstractApplicationContext)applicationContext).refresh();
     }
 }
