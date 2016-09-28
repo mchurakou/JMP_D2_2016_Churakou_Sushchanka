@@ -7,18 +7,9 @@ import java.sql.Timestamp;
  * Created by alt-hanny on 25.09.2016.
  */
 public class Post implements Serializable {
-    private int id;
     private int userId;
     private String text;
     private Timestamp timestamp;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getUserId() {
         return userId;
@@ -47,7 +38,6 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder("Post: ");
-        stringBuilder.append(" id=").append(id);
         stringBuilder.append(" userId=").append(userId);
         stringBuilder.append(" text=").append(text);
         stringBuilder.append(" timestamp=").append(timestamp);
