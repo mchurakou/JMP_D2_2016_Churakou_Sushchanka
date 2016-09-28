@@ -73,19 +73,19 @@ public enum QueriesEnum {
         public String getQuery() {
             return " select * from \n" +
                     " (\n" +
-                    "\tselect ulc.user_id, ulc.user_name, ulc.user_surname, ulc.likes_count, COUNT(ulc.user_id) as friends_count \n" +
+                    "\tselect usersLikes.user_id, usersLikes.user_name, usersLikes.user_surname, usersLikes.likes_count, COUNT(usersLikes.user_id) as friends_count \n" +
                     "\tfrom \n" +
                     "\t(\n" +
                     "\t\tselect u.id as user_id, u.name as user_name, u.surname as user_surname, \n" +
                     "\t\tCOUNT(u.id) as likes_count\n" +
                     "\t\tfrom posts as p\n" +
-                    "\t\tjoin likes as l on l.postid = p.id\n" +
-                    "\t\tjoin users as u on p.userId = u.id\n" +
+                    "\t\tinner join likes as l on l.postid = p.id\n" +
+                    "\t\tinner join users as u on p.userId = u.id\n" +
                     "\t\twhere l.timestamp >= '2015-01-01 00:00:00' and l.timestamp <= '2015-12-31 23:59:59'\n" +
                     "\t\tgroup by u.id\n" +
-                    "\t) as ulc\n" +
-                    "\tjoin friendships as f on f.userid1 = ulc.user_id\n" +
-                    "\tgroup by ulc.user_id\n" +
+                    "\t) as usersLikes\n" +
+                    "\tinner join friendships as f on f.userid1 = usersLikes.user_id\n" +
+                    "\tgroup by usersLikes.user_id\n" +
                     " ) as result\n" +
                     " where result.likes_count > 20 and result.friends_count > 90\n" +
                     " order by result.likes_count desc, result.friends_count desc";
