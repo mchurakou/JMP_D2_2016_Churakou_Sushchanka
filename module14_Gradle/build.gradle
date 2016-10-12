@@ -1,0 +1,57 @@
+group 'com.sushchanka.project'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'jacoco'
+//apply plugin: 'checkstyle'
+apply plugin: 'com.bmuschko.tomcat'
+
+war.baseName = 'Module14_Gradle'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+}
+
+dependencies {
+
+    def tomcatVersion = '7.0.59'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+jacoco {
+    toolVersion = "0.7.5+"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        csv.enabled = true
+    }
+}
+
+task A (dependsOn: 'B') << {
+    println 'task A'
+}
+
+task B << {
+    println 'task B'
+}
