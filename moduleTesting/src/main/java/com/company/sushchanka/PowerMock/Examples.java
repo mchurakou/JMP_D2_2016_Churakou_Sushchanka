@@ -1,6 +1,8 @@
 package com.company.sushchanka.PowerMock;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,5 +39,9 @@ public class Examples {
     public boolean createFile(){
         File file = new File(FILE_PATH);
         return file.exists();
+    }
+
+    public String getDBConnection() throws SQLException {
+        throw new SQLException("No connection");
     }
 }

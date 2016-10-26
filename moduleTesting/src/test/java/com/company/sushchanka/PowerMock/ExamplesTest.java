@@ -13,6 +13,7 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -86,5 +87,12 @@ public class ExamplesTest {
         File createdFile = folder.newFile("qqq.cvs");
         when(examples.createFile()).thenReturn(createdFile.exists());
         assertEquals(createdFile.exists(), examples.createFile());
+    }
+
+    @Test
+    public void testDBConnection() throws SQLException {
+        Examples examples = mock(Examples.class);
+        when(examples.getDBConnection()).thenReturn("No connection");
+        assertEquals(examples.getDBConnection(), "No connection");
     }
 }

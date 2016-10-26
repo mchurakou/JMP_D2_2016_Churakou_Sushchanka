@@ -24,21 +24,24 @@ public class QuadraticEquationTest {
 
     @Test
     public void testResult() {
-        double D = 4;
-        QuadraticEquation quadraticEquation = new QuadraticEquation();
-        quadraticEquation.setD(D);
+
+        QuadraticEquation quadraticEquation = new QuadraticEquation(1, 4 , 3);
+
         List<Double> result = quadraticEquation.getResult();
         assertEquals(2, result.size());
         result.clear();
-        D = -1;
-        quadraticEquation.setD(D);
-        result = quadraticEquation.getResult();
+        QuadraticEquation quadraticEquation1 = new QuadraticEquation(1, 0 , 3);
+        result = quadraticEquation1.getResult();
         assertEquals(0, result.size());
         result.clear();
-        D = 0;
-        quadraticEquation.setD(D);
-        result = quadraticEquation.getResult();
+        QuadraticEquation quadraticEquation2 = new QuadraticEquation(1, 2, 1);
+        result = quadraticEquation2.getResult();
         assertEquals(1, result.size());
+        result.clear();
+        QuadraticEquation lineEquation = new QuadraticEquation(0, 4, 2);
+        result = lineEquation.getResult();
+        assertEquals(1, result.size());
+        assertEquals(-0.5, result.get(0), 0);
         result.clear();
     }
 }

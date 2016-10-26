@@ -20,9 +20,8 @@ public class App
             b = scanner.nextDouble();
             c = scanner.nextDouble();
             new QuadraticEquation(a,b,c).getResult();
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | ArithmeticException e) {
             System.out.println("Incorrect input. Please, try again.");
         }
-
     }
 }
