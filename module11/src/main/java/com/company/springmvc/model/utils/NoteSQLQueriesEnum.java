@@ -3,11 +3,12 @@ package com.company.springmvc.model.utils;
 /**
  * Created by alt-hanny on 23.10.2016.
  */
-public enum TaskSQLQueriesEnum {
-    QWER {
+public enum NoteSQLQueriesEnum {
+
+    INSERT_NOTE {
         @Override
         public String getQuery() {
-            return null;
+            return "INSERT INTO notes (userId, task, date) VALUES (?,?,?)";
         }
     };
 

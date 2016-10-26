@@ -1,6 +1,13 @@
 package com.company.springmvc.configuration;
 
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 /**
  * Created by alt-hanny on 23.10.2016.
@@ -20,16 +27,4 @@ public class HelloWorldInitializer extends AbstractAnnotationConfigDispatcherSer
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-
-//    @Override
-//    public void onStartup(ServletContext servletContext) throws ServletException {
-//        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-//        context.register(HelloWorldConfiguration.class);
-//        context.setServletContext(servletContext);
-//
-//        ServletRegistration.Dynamic servletRegistration = servletContext.addServlet("dispatcher", new DispatcherServlet(context));
-//        servletRegistration.setLoadOnStartup(1);
-//        servletRegistration.addMapping("/");
-//
-//    }
 }
