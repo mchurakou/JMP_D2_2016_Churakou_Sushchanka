@@ -41,5 +41,4 @@ public class QuadraticEquationTest {
         assertEquals(1, result.size());
         result.clear();
     }
-
 }
