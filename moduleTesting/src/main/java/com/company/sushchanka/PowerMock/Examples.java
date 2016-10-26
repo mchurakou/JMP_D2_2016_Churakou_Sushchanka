@@ -34,7 +34,8 @@ public class Examples {
         return new Example(5);
     }
 
-    public void createFile(){
+    public boolean createFile(){
         File file = new File(FILE_PATH);
+        return file.exists();
     }
 }

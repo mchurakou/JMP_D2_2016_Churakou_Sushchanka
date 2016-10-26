@@ -82,7 +82,9 @@ public class ExamplesTest {
 
     @Test
     public void testFileSystem() throws Exception {
+        Examples examples = mock(Examples.class);
         File createdFile = folder.newFile("qqq.cvs");
-        assertTrue(createdFile.exists());
+        when(examples.createFile()).thenReturn(createdFile.exists());
+        assertEquals(createdFile.exists(), examples.createFile());
     }
 }
