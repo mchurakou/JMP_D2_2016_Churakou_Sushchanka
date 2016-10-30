@@ -156,5 +156,4 @@ public class NoteImplDAO implements INoteDAO {
         return notesList;
     }
 
-
 }
