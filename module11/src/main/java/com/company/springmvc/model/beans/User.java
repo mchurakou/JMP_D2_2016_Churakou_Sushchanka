@@ -17,7 +17,12 @@ public class User implements Serializable {
     private List<Task> tasks;
 
 
-    public User(long id, String name, String surname, String mail) {
+    public User(long id, String name, String surname, String mail, List<Task> tasks) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.mail = mail;
+        this.tasks = tasks;
     }
 
     public long getId() {

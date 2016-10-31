@@ -1,12 +1,12 @@
 package com.company.springmvc.service;
 
+import com.company.springmvc.model.beans.Task;
 import com.company.springmvc.model.beans.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -82,8 +82,10 @@ public class UserServiceImpl implements UserService{
 
     private static List<User> populateDummyUsers() {
         List<User> users = new ArrayList<>();
-        users.add(new User(counter.incrementAndGet(), "Hanna", "Sushchanka", "Asus200786@gmail.com"));
-        users.add(new User(counter.incrementAndGet(), "Anna", "Sushch", "Asus@gmail.com"));
+        users.add(new User(counter.incrementAndGet(), "Hanna", "Sushchanka", "Asus200786@gmail.com",
+                new ArrayList<>(Arrays.asList(new Task (1L, "A", "aaa", new Date("2016-10-06"), new Date("2016-11-11"))))));
+        users.add(new User(counter.incrementAndGet(), "Anna", "Sushch", "Asus@gmail.com",
+                new ArrayList<>(Arrays.asList(new Task (2L, "B", "bbb", new Date("2016-11-06"), new Date("2016-12-11"))))));
         return users;
     }
 }
