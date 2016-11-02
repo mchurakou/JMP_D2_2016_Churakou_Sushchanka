@@ -14,6 +14,6 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.company.springmvc")
-public class HelloWorldConfiguration {
+public class AppConfiguration {
 
 }
