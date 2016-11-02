@@ -1,6 +1,5 @@
 package com.company.springmvc.controller;
 
-import com.company.springmvc.model.beans.Task;
 import com.company.springmvc.model.beans.User;
 import com.company.springmvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

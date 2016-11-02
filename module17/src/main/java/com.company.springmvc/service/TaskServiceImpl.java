@@ -1,7 +1,6 @@
 package com.company.springmvc.service;
 
 import com.company.springmvc.model.beans.Task;
-import com.company.springmvc.model.beans.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
