@@ -19,8 +19,6 @@ public class UserServiceImpl implements UserService{
     
     private static final AtomicLong counter = new AtomicLong();
     private static List<User> users;
-    private static final AtomicLong taskCounter = new AtomicLong();
-    private static List<Task> tasks;
     
     static {
         users = populateDummyUsers();
@@ -72,27 +70,6 @@ public class UserServiceImpl implements UserService{
             }
         }
     }
-
-    @Override
-    public List<Task> findAllUserTasks(long userId) {
-        tasks = findById(userId).getTasks();
-        if (tasks.isEmpty()){
-            return null;
-        }
-        return tasks;
-    }
-
-    @Override
-    public Task findUserTaskByIdTask(long userId, long taskId) {
-        tasks = findById(userId).getTasks();
-        for(Task task : tasks) {
-            if(task.getId() == taskId) {
-                return task;
-            }
-        }
-        return null;
-    }
-
 
     @Override
     public void deleteAllUsers() {

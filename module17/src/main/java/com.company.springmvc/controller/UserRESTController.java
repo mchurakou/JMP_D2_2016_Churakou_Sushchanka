@@ -107,27 +107,4 @@ public class UserRESTController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /**
-     * Retrieve all user's tasks.
-     */
-    @RequestMapping(value = "/user/{userId}/task/", method = RequestMethod.GET)
-    public ResponseEntity<List<Task>> listAllTasksOfUser(@PathVariable("userId") long userId ) {
-        List<Task> tasks = userService.findAllUserTasks(userId);
-        if(tasks.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
-    }
-
-    /**
-     * Retrieve user task by id.
-     */
-    @RequestMapping(value = "/user/{userId}/task/{taskId}", method = RequestMethod.GET)
-    public ResponseEntity<Task> userTaskByIdTask(@PathVariable("userId") long userId, @PathVariable("taskId") long taskId) {
-        Task task = userService.findUserTaskByIdTask(userId, taskId);
-        if(task == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(task, HttpStatus.OK);
-    }
 }
