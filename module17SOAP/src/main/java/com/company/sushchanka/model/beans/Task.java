@@ -6,7 +6,6 @@ import java.util.Date;
 /**
  * Created by alt-hanny on 30.10.2016.
  */
-@XmlRootElement(name="task")
 public class Task {
     private long id;
     private String name;

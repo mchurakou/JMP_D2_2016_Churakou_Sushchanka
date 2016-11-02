@@ -2,10 +2,9 @@ package com.company.sushchanka.service;
 
 import com.company.sushchanka.model.beans.Task;
 import com.company.sushchanka.model.beans.User;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.WebService;
+import javax.jws.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,24 +15,23 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by alt-hanny on 30.10.2016.
  */
-@WebService(endpointInterface = "com.company.sushchanka.service.UserWebServiceSEI",serviceName = "UserWebServiceImpl")
-public class UserWebServiceImpl implements UserWebServiceSEI{
+@WebService//(endpointInterface = "com.company.sushchanka.service.UserService")
+@Transactional
+public class UserServiceImpl implements UserService{
     
     private static final AtomicLong counter = new AtomicLong();
     private static List<User> users;
-    private static final AtomicLong taskCounter = new AtomicLong();
+    private static final AtomicLong counterTasks = new AtomicLong();
     private static List<Task> tasks;
     
     static {
         users = populateDummyUsers();
     }
 
-    @Override
     public List<User> findAllUsers() {
         return users;
     }
 
-    @Override
     public User findById(long id) {
         for (User user : users) {
             if (user.getId() == id) {
@@ -43,7 +41,6 @@ public class UserWebServiceImpl implements UserWebServiceSEI{
         return null;
     }
 
-    @Override
     public User findByName(String name) {
         for(User user : users){
             if(user.getName().equalsIgnoreCase(name)){
@@ -53,19 +50,16 @@ public class UserWebServiceImpl implements UserWebServiceSEI{
         return null;
     }
 
-    @Override
     public void saveUser(User user) {
         user.setId(counter.incrementAndGet());
         users.add(user);
     }
 
-    @Override
     public void updateUser(User user) {
         int index = users.indexOf(user);
         users.set(index, user);
     }
 
-    @Override
     public void deleteUserById(long id) {
         for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
             User user = iterator.next();
@@ -75,7 +69,14 @@ public class UserWebServiceImpl implements UserWebServiceSEI{
         }
     }
 
-    @Override
+    public void deleteAllUsers() {
+        users.clear();
+    }
+
+    public boolean isUserExist(User user) {
+        return findByName(user.getName()) != null;
+    }
+
     public List<Task> findAllUserTasks(long userId) {
         tasks = findById(userId).getTasks();
         if (tasks.isEmpty()){
@@ -84,7 +85,6 @@ public class UserWebServiceImpl implements UserWebServiceSEI{
         return tasks;
     }
 
-    @Override
     public Task findUserTaskByIdTask(long userId, long taskId) {
         tasks = findById(userId).getTasks();
         for(Task task : tasks) {
@@ -95,17 +95,45 @@ public class UserWebServiceImpl implements UserWebServiceSEI{
         return null;
     }
 
-
-    @Override
-    public void deleteAllUsers() {
-        users.clear();
+    public boolean isTaskExist(long userId, Task task) {
+        return findTaskByName(userId, task.getName()) != null ;
     }
 
-    @Override
-    public boolean isUserExist(User user) {
-        return findByName(user.getName()) != null;
+    public Task findTaskByName(long userId, String name) {
+        tasks = findById(userId).getTasks();
+        for(Task task : tasks){
+            if(task.getName().equalsIgnoreCase(name)){
+                return task;
+            }
+        }
+        return null;
     }
 
+    public void saveTask(long userId, Task task) {
+        task.setId(counterTasks.incrementAndGet());
+        findById(userId).getTasks().add(task);
+    }
+
+    public void updateUserTask(long userId, Task task) {
+        tasks = findById(userId).getTasks();
+        int index = tasks.indexOf(task);
+        tasks.set(index, task);
+    }
+
+    public void deleteTaskOfUserById(long userId, long taskId) {
+        tasks = findById(userId).getTasks();
+        for (Iterator<Task> iterator = tasks.iterator(); iterator.hasNext();) {
+            Task task = iterator.next();
+            if (task.getId() == taskId) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public void deleteAllUserTasks(long userId) {
+        tasks = findById(userId).getTasks();
+        tasks.clear();
+    }
     private static List<User> populateDummyUsers(){
         List<User> users = new ArrayList<>();
         List<Task> tasks = new ArrayList<>();
