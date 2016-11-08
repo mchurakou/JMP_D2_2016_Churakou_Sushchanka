@@ -1,6 +1,6 @@
 package com.company.springmvc.model.beans;
 
-import com.company.springmvc.model.utils.DateHelper;
+import com.company.springmvc.utils.DateHelper;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -17,19 +17,6 @@ public class Note implements Serializable {
     private Date date;
     private String file;
     private int status;
-
-    public Note(int id, int userId, int status) {
-        super();
-        this.id = id;
-        this.userId = userId;
-        this.status = status;
-    }
-
-    public Note(int userId, String task) {
-        super();
-        this.userId = userId;
-        this.task = task;
-    }
 
     public Note(int id, int userId, String task, Date date, String file,
                 int status) {
@@ -98,4 +85,6 @@ public class Note implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
+
 }

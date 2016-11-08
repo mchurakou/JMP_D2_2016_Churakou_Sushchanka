@@ -1,4 +1,4 @@
-package com.company.springmvc.model.utils;
+package com.company.springmvc.utils;
 
 import java.util.Calendar;
 import java.util.Date;

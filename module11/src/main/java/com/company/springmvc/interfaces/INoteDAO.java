@@ -1,7 +1,7 @@
-package com.company.springmvc.model.interfaces;
+package com.company.springmvc.interfaces;
 
 import com.company.springmvc.model.beans.Note;
-import com.company.springmvc.model.impls.DAOException;
+import com.company.springmvc.impls.DAOException;
 
 import java.sql.SQLException;
 import java.util.Date;

@@ -1,6 +1,6 @@
-package com.company.springmvc.model.connections;
+package com.company.springmvc.connections;
 
-import com.company.springmvc.model.utils.Constants;
+import com.company.springmvc.utils.Constants;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +15,7 @@ public class ConnectionDBImpl implements IConnectionDBDAO {
     /** Constant for the class name. */
     private final String DRIVER_CLASS_NAME = "org.h2.Driver";
     /** Constant for the database URL. */
-    private final String DB_URL = "jdbc:h2:~/test";
+    private final String DB_URL = "jdbc:h2:~/module11";
     /** Constant for the login of the database. */
     private final String LOGIN = "sa";
     /** Constant for the password of the database. */

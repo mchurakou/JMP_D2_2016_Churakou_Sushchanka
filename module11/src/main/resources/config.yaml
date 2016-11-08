@@ -1,0 +1,12 @@
+#spring proerties
+spring:
+  messages:
+    basename: messages
+    cache-seconds: -1
+    encoding: UTF-8
+  datasource:
+    url: jdbc:h2:~/module11
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+ # view: {prefix: /WEB-INF/views/, suffix: .jsp}

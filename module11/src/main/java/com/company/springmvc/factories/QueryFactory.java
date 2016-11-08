@@ -1,7 +1,7 @@
-package com.company.springmvc.model.factories;
+package com.company.springmvc.factories;
 
-import com.company.springmvc.model.utils.NoteSQLQueriesEnum;
-import com.company.springmvc.model.utils.UserSQLQueriesEnum;
+import com.company.springmvc.utils.NoteSQLQueriesEnum;
+import com.company.springmvc.utils.UserSQLQueriesEnum;
 
 /**
  * Created by alt-hanny on 23.10.2016.

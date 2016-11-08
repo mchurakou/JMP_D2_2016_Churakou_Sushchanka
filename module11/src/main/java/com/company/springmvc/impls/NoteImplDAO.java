@@ -1,13 +1,13 @@
-package com.company.springmvc.model.impls;
+package com.company.springmvc.impls;
 
 import com.company.springmvc.model.beans.Note;
-import com.company.springmvc.model.connections.IConnectionDBDAO;
-import com.company.springmvc.model.factories.DBConnectionFactory;
-import com.company.springmvc.model.factories.QueryFactory;
-import com.company.springmvc.model.interfaces.INoteDAO;
-import com.company.springmvc.model.utils.CalendarUtil;
-import com.company.springmvc.model.utils.Constants;
-import com.company.springmvc.model.utils.NoteSQLQueriesEnum;
+import com.company.springmvc.connections.IConnectionDBDAO;
+import com.company.springmvc.factories.DBConnectionFactory;
+import com.company.springmvc.factories.QueryFactory;
+import com.company.springmvc.interfaces.INoteDAO;
+import com.company.springmvc.utils.CalendarUtil;
+import com.company.springmvc.utils.Constants;
+import com.company.springmvc.utils.NoteSQLQueriesEnum;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

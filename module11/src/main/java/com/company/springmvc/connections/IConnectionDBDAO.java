@@ -1,4 +1,4 @@
-package com.company.springmvc.model.connections;
+package com.company.springmvc.connections;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package com.company.springmvc.model.utils;
+package com.company.springmvc.utils;
 
 /**
  * Created by alt-hanny on 23.10.2016.
